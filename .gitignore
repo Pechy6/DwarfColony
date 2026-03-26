@@ -24,4 +24,4 @@ project.fragment.lock.json
 artifacts/
 
 # macOs
-.DS_Store
+.DS_Stor
