@@ -1,0 +1,32 @@
+@model IEnumerable<DwarfColony.Models.Entities.Dwarf>
+@{
+    ViewData["Title"] = "Dwarves";
+}
+
+<h1>Dwarves in base</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Energy</th>
+        <th>Hunger</th>
+        <th>Thirst</th>
+        <th>IsAlive</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var dwarf in Model)
+    {
+        <tr>
+            <td>@dwarf.Name</td>
+            <td>@dwarf.Age</td>
+            <td>@dwarf.Energy</td>
+            <td>@dwarf.Hunger</td>
+            <td>@dwarf.Thirst</td>
+            <td>@dwarf.IsAlive</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
