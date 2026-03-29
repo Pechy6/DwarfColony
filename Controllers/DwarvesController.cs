@@ -1,12 +1,15 @@
 using DwarfColony.Data;
 using DwarfColony.Models.Entities;
+using DwarfColony.Models.ViewModels;
+using DwarfColony.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DwarfColony.Controllers;
 
-public class DwarvesController(ApplicationDbContext context) : Controller
+public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory) : Controller
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly DwarfFactory _dwarfFactory = dwarfFactory;
 
     // GET
     public IActionResult Index()
@@ -17,18 +20,21 @@ public class DwarvesController(ApplicationDbContext context) : Controller
 
     public IActionResult Create()
     {
-        return View();
+        CreateDwarfModel dwarfModel = new();
+        return View(dwarfModel);
     }
     
     [HttpPost]
-    public IActionResult Create(Dwarf dwarf)
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(CreateDwarfModel createDwarfModel)
     {
         if (ModelState.IsValid)
         {
+            Dwarf dwarf = _dwarfFactory.Create(createDwarfModel);
             _context.Dwarves.Add(dwarf);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        return View(dwarf);
+        return View(createDwarfModel);
     }
 }

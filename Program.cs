@@ -1,4 +1,5 @@
 using DwarfColony.Data;
+using DwarfColony.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(connectionString));
+
+builder.Services.AddTransient<DwarfFactory>();
 
 var app = builder.Build();
 
