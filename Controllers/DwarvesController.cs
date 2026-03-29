@@ -37,4 +37,20 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         }
         return View(createDwarfModel);
     }
+
+    public IActionResult Edit(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+        
+        var dwarf = _context.Dwarves.Find(id);
+        if (dwarf == null)
+        {
+            return NotFound();
+        }
+        
+        return View(dwarf);
+    }
 }
