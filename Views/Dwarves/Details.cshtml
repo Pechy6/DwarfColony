@@ -10,6 +10,9 @@
 <p>Hunger: @Model.Hunger</p>
 <p>Thirst: @Model.Thirst</p>
 
+<a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@Model.Id">Edit dwarf</a>
+<a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@Model.Id">Remove dwarf</a>
+
 <a asp-controller="Dwarves" asp-action="Index">Back to list of dwarves</a>
 
 

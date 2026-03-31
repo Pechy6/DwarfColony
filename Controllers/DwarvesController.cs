@@ -101,4 +101,36 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         }
         return View(editDwarfModel);
     }
+
+    public IActionResult Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var dwarfEntity = _context.Dwarves.Find(id);
+
+        if (dwarfEntity == null)
+        {
+            return NotFound();
+        }
+        
+        return View(dwarfEntity);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        var dwarfEntity = _context.Dwarves.Find(id);
+
+        if (dwarfEntity != null)
+        {
+            _context.Dwarves.Remove(dwarfEntity);
+        }
+        
+        _context.SaveChanges();
+        return RedirectToAction(nameof(Index));
+    }
 }
