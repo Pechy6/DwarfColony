@@ -13,6 +13,8 @@
         <th>Hunger</th>
         <th>Thirst</th>
         <th>IsAlive</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +27,7 @@
             <td>@dwarf.Hunger</td>
             <td>@dwarf.Thirst</td>
             <td>@dwarf.IsAlive</td>
+            <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" >Edit</a></td>
         </tr>
     }
     </tbody>
