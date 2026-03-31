@@ -44,13 +44,44 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             return NotFound();
         }
+        var dwarfEntity = _context.Dwarves.Find(id);
         
-        var dwarf = _context.Dwarves.Find(id);
-        if (dwarf == null)
+        if (dwarfEntity == null)
+        {
+            return NotFound();
+        }
+
+        var editDwarfModel = new EditDwarfModel
+        {
+            Id = dwarfEntity.Id,
+            Name = dwarfEntity.Name
+        };
+        
+        return View(editDwarfModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(int id, EditDwarfModel editDwarfModel)
+    {
+        if (id != editDwarfModel.Id)
+        {
+            return NotFound();
+        }
+
+        var dwarfEntity = _context.Dwarves.Find(id);
+        if (dwarfEntity == null)
         {
             return NotFound();
         }
         
-        return View(dwarf);
+        if (ModelState.IsValid)
+        {
+            dwarfEntity.Name = editDwarfModel.Name;
+            
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(editDwarfModel);
     }
 }
