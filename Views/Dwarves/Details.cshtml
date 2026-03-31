@@ -1,18 +1,15 @@
-@model TModel
-
+@model DwarfColony.Models.Entities.Dwarf
 @{
-    Layout = null;
+    ViewData["Title"] = "Details @Model.Name";
 }
 
-<!DOCTYPE html>
+<h1><b>@Model.Name</b></h1>
+<p>Dwarf details:</p>
+<p>Age of dwarf: @Model.Age</p>
+<p>Energy: @Model.Energy</p>
+<p>Hunger: @Model.Hunger</p>
+<p>Thirst: @Model.Thirst</p>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<a asp-controller="Dwarves" asp-action="Index">Back to list of dwarves</a>
+
+

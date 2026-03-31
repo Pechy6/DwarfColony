@@ -21,7 +21,7 @@
     @foreach (var dwarf in Model)
     {
         <tr>
-            <td>@dwarf.Name</td>
+            <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id">@dwarf.Name</a></td>
             <td>@dwarf.Age</td>
             <td>@dwarf.Energy</td>
             <td>@dwarf.Hunger</td>
