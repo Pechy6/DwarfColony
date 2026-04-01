@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DwarfColony.Controllers;
 
-public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory) : Controller
+public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, DwarfTickService tickService) : Controller
 {
     private readonly ApplicationDbContext _context = context;
     private readonly DwarfFactory _dwarfFactory = dwarfFactory;
+    private readonly DwarfTickService _tickService = tickService;
 
     // GET
     public IActionResult Index()
@@ -130,6 +131,15 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
             _context.Dwarves.Remove(dwarfEntity);
         }
         
+        _context.SaveChanges();
+        return RedirectToAction(nameof(Index));
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Tick()
+    {
+        _tickService.Tick();
         _context.SaveChanges();
         return RedirectToAction(nameof(Index));
     }
