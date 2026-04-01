@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<DwarfFactory>();
+builder.Services.AddTransient<DwarfTickService>();
 
 var app = builder.Build();
 
