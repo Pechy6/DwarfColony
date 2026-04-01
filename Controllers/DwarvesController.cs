@@ -72,7 +72,8 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         var editDwarfModel = new EditDwarfModel
         {
             Id = dwarfEntity.Id,
-            Name = dwarfEntity.Name
+            Name = dwarfEntity.Name,
+            Job = dwarfEntity.Job
         };
         
         return View(editDwarfModel);
@@ -96,6 +97,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         if (ModelState.IsValid)
         {
             dwarfEntity.Name = editDwarfModel.Name;
+            dwarfEntity.Job = editDwarfModel.Job;
             
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
