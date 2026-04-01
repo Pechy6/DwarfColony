@@ -1,18 +1,19 @@
+using DwarfColony.Data;
 using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Services;
 
 public class DwarfTickService
 {
-    private List<Dwarf> Dwarves { get; set; }
+    private readonly ApplicationDbContext _context;
 
     private readonly int _energy = 1;
     private readonly int _hunger = 1;
     private readonly int _thirst = 1;
 
-    public DwarfTickService(List<Dwarf> dwarves)
+    public DwarfTickService(ApplicationDbContext context)
     {
-        Dwarves = dwarves;
+        _context = context;
     }
     
     public void Tick()
@@ -22,7 +23,9 @@ public class DwarfTickService
 
     private void Stats()
     {
-        foreach (var dwarf in Dwarves)
+        var dwarves = _context.Dwarves.ToList();
+        
+        foreach (var dwarf in dwarves)
         {
             dwarf.Energy -= _energy;
             if (dwarf.Energy <= 0)
