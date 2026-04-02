@@ -1,31 +1,33 @@
-html {
-  font-size: 14px;
+body{
+  background-color: #b6b4b4;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.avatar{
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.left{
+  text-align: left;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-body {
-  margin-bottom: 60px;
+ul li {
+  text-align: left;
+  font-weight: bold;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+
+article {
+  text-align: center;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+article header {
+  margin-top: 10px;
 }
+
