@@ -4,37 +4,40 @@
 }
 
 <div class="table-responsive-md">
-<table class="table table-dark table-hover">
-    <thead class="table-danger">
-    <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Energy</th>
-        <th>Hunger</th>
-        <th>Thirst</th>
-        <th>IsAlive</th>
-        <th>Job</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    </thead>
-    <tbody class="">
-    @foreach (var dwarf in Model)
-    {
+    <table class="table table-dark table-hover">
+        <thead class="table-danger">
         <tr>
-            <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id" class="table-text">@dwarf.Name</a></td>
-            <td>@dwarf.Age</td>
-            <td>@dwarf.Energy</td>
-            <td>@dwarf.Hunger</td>
-            <td>@dwarf.Thirst</td>
-            <td>@dwarf.IsAlive</td>
-            <td>@dwarf.Job</td>
-            <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" class="table-edit" >Edit</a></td>
-            <td><a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@dwarf.Id" class="table-delete">Delete</a></td>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Energy</th>
+            <th>Hunger</th>
+            <th>Thirst</th>
+            <th>IsAlive</th>
+            <th>Job</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="">
+        @foreach (var dwarf in Model)
+        {
+            <tr>
+                <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id"
+                       class="table-text">@dwarf.Name</a></td>
+                <td>@dwarf.Age</td>
+                <td>@dwarf.Energy</td>
+                <td>@dwarf.Hunger</td>
+                <td>@dwarf.Thirst</td>
+                <td>@dwarf.IsAlive</td>
+                <td>@dwarf.Job</td>
+                <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" class="table-edit">Edit</a>
+                </td>
+                <td><a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@dwarf.Id"
+                       class="table-delete">Delete</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
 <form asp-controller="Dwarves" asp-action="Tick" method="post">
     <div class="text-start">
@@ -43,5 +46,6 @@
 </form>
 
 <h3>Hire Dwarf to Base</h3>
+    <a class="btn btn-outline-light" asp-controller="Dwarves" asp-action="Create">Hire</a>
 
 
