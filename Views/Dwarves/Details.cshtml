@@ -1,19 +1,31 @@
 @model DwarfColony.Models.Entities.Dwarf
 @{
-    ViewData["Title"] = "Details @Model.Name";
+    ViewData["Title"] = "Details";
 }
 
-<h1><b>@Model.Name</b></h1>
-<p>Dwarf details:</p>
-<p>Age of dwarf: @Model.Age</p>
-<p>Energy: @Model.Energy</p>
-<p>Hunger: @Model.Hunger</p>
-<p>Thirst: @Model.Thirst</p>
-<p>Job : @Model.Job</p>
 
-<a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@Model.Id">Edit dwarf</a>
-<a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@Model.Id">Remove dwarf</a>
+<div class="text-start">
+    <h3>@Model.Name</h3>
+    <p class="job-title">@Model.Job</p>
+    <ul>
+        <li>Age: @Model.Age</li>
+        <li>Energy: @Model.Energy</li>
+        <li>Hunger: @Model.Hunger</li>
+        <li>Thirst: @Model.Thirst</li>
+    </ul>
+</div>
+<div class="text-start">
+    <button class="btn btn-outline-primary my-btn">
+        <a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@Model.Id">Edit dwarf</a>
+    </button>
+    <button class="btn btn-outline-danger my-btn ms-3">
+        <a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@Model.Id">Remove dwarf</a>
+    </button>
+</div>
+<div class="text-start mt-3">
+    <a asp-controller="Dwarves" asp-action="Index">Back to Dwarf Base</a>
+</div>
 
-<a asp-controller="Dwarves" asp-action="Index">Back to list of dwarves</a>
+
 
 

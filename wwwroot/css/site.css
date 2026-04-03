@@ -1,33 +1,98 @@
-body{
-  background-color: #b6b4b4;
+body {
+    background-color: #1e1e1e;
+    color: #eaeaea;
 }
 
-.avatar{
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
+.avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 }
 
-.left{
-  text-align: left;
-}
 
 ul {
-  list-style-type: none;
-  padding: 0;
+    list-style-type: none;
+    padding: 0;
 }
 
 ul li {
-  text-align: left;
-  font-weight: bold;
+    text-align: left;
 }
 
-
 article {
-  text-align: center;
+    text-align: center;
 }
 
 article header {
-  margin-top: 10px;
+    margin-top: 10px;
+}
+
+section h3 {
+    margin: 10px 0 20px 0;
+}
+
+footer {
+    height: 80px;
+}
+
+.table-text {
+    color: #fa823f;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.table-text:hover {
+    color: #b55720;
+    font-weight: lighter;
+}
+
+.table-edit {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.table-edit:hover {
+    color: #0056b3;
+    font-weight: bold;
+}
+
+.table-delete {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+.table-delete:hover {
+    color: #b02a37;
+    font-weight: bold;
+}
+
+.label-text {
+    font-weight: bold;
+}
+
+button a {
+    color: #eaeaea;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+button:hover a {
+    color: #1e1e1e;
+}
+
+a {
+    color: #fa823f;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+
+.job-title {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.my-btn:hover {
+    color: #fa823f;
 }
 

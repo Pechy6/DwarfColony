@@ -1,24 +1,29 @@
 @using DwarfColony.Models.Entities
 @model DwarfColony.Models.ViewModels.EditDwarfModel
 @{
-    ViewData["Title"] = "Edit @Model.Name";
+    ViewData["Title"] = "Edit Dwarf";
 }
 
-<h1>Dwarf: <b>@Model.Name</b></h1>
-<h3>Job: <b>@Model.Job</b></h3>
+<h3 class="text-start"><b>Name</b>: @Model.Name</h3>
+<h3 class="text-start"><b>Job</b>: @Model.Job</h3>
 <form asp-action="Edit">
     <input type="hidden" asp-for="Id"/>
-    
+
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control">
+        <label asp-for="Name" class="form-label text-start d-block label-text"></label>
+        <input asp-for="Name" class="form-control mb-2">
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Job" class="form-label"></label>
-        <select asp-for="Job" asp-items="Html.GetEnumSelectList<DwarfJob>()" class="form-control"></select>
+        <label asp-for="Job" class="form-label text-start d-block label-text"></label>
+        <select asp-for="Job" asp-items="Html.GetEnumSelectList<DwarfJob>()" class="form-control mb-3"></select>
     </div>
 
-    <input type="submit" value="Save" class="btn btn-primary">
+    <div class="text-start">
+        <input type="submit" value="Save" class="btn btn-outline-primary btn-lg">
+    </div>
+    <div class="text-start mt-4">
+        <a asp-controller="Dwarves" asp-action="Index">Back to Dwarf Base</a>
+    </div>
 </form>

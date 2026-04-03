@@ -1,11 +1,11 @@
 @model IEnumerable<DwarfColony.Models.Entities.Dwarf>
 @{
-    ViewData["Title"] = "Dwarves";
+    ViewData["Title"] = "Dwarf Base";
 }
 
-<h1>Dwarves in base</h1>
-<table>
-    <thead>
+<div class="table-responsive-md">
+<table class="table table-dark table-hover">
+    <thead class="table-danger">
     <tr>
         <th>Name</th>
         <th>Age</th>
@@ -14,29 +14,34 @@
         <th>Thirst</th>
         <th>IsAlive</th>
         <th>Job</th>
-        <th>Add Job</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="">
     @foreach (var dwarf in Model)
     {
         <tr>
-            <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id">@dwarf.Name</a></td>
+            <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id" class="table-text">@dwarf.Name</a></td>
             <td>@dwarf.Age</td>
             <td>@dwarf.Energy</td>
             <td>@dwarf.Hunger</td>
             <td>@dwarf.Thirst</td>
             <td>@dwarf.IsAlive</td>
             <td>@dwarf.Job</td>
-            <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" >Edit</a></td>
-            <td><a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@dwarf.Id">Delete</a></td>
+            <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" class="table-edit" >Edit</a></td>
+            <td><a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@dwarf.Id" class="table-delete">Delete</a></td>
         </tr>
     }
     </tbody>
-    <form asp-controller="Dwarves" asp-action="Tick" method="post">
-        <button type="submit" class="btn btn-primary">Tick</button>
-    </form>
 </table>
+</div>
+<form asp-controller="Dwarves" asp-action="Tick" method="post">
+    <div class="text-start">
+        <button type="submit" class="btn btn-outline-light btn-lg">Tick</button>
+    </div>
+</form>
+
+<h3>Hire Dwarf to Base</h3>
+
 
