@@ -46,5 +46,19 @@ public class SeedData
         
             context.SaveChanges();   
         }
+
+        if (!context.Storages.Any())
+        {
+            context.Storages.Add(new Storage()
+            {
+                RawFood = 100,
+                Food = 50,
+                Water = 100,
+                Coal = 35,
+                Stone = 50,
+                IronCore = 20,
+                Wood = 100
+            });
+        }
     }
 }
