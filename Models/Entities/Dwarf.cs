@@ -10,6 +10,13 @@ public enum DwarfJob
     Miner
 }
 
+public enum DwarfStatus
+{
+    Fit,
+    Strained,
+    Exhausted
+}
+
 public class Dwarf
 {
     public int Id { get; set; }
