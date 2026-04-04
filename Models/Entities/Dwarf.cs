@@ -28,6 +28,6 @@ public class Dwarf
     public bool IsAlive { get; set; }
     
     public DwarfJob Job { get; set; } = DwarfJob.None;
-    
-    public DwarfStatus Status { get; set; }
+
+    public DwarfStatus Status { get; set; } = DwarfStatus.Fit;
 }
