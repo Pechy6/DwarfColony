@@ -1,3 +1,5 @@
+using DwarfColony.Services;
+
 namespace DwarfColony.Models.Entities;
 
 public enum DwarfJob
@@ -19,4 +21,6 @@ public class Dwarf
     public bool IsAlive { get; set; }
     
     public DwarfJob Job { get; set; } = DwarfJob.None;
+    
+    public DwarfStatus Status { get; set; }
 }
