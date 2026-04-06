@@ -59,6 +59,7 @@ public class SeedData
                 IronCore = 20,
                 Wood = 100
             });
+            context.SaveChanges();  
         }
     }
 }
