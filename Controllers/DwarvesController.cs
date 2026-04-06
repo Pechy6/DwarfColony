@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DwarfColony.Controllers;
 
-public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, DwarfTickService tickService) : Controller
+public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, TickService tickService) : Controller
 {
     private readonly ApplicationDbContext _context = context;
     private readonly DwarfFactory _dwarfFactory = dwarfFactory;
-    private readonly DwarfTickService _tickService = tickService;
+    private readonly TickService _tickService = tickService;
 
     // GET
     public IActionResult Index()
