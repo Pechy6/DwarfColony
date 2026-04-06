@@ -13,8 +13,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(connectionString));
 
-builder.Services.AddTransient<DwarfFactory>();
-builder.Services.AddTransient<DwarfTickService>();
+// Services
+builder.Services.AddScoped<DwarfFactory>();
+builder.Services.AddScoped<DwarfTickService>();
+builder.Services.AddScoped<TickService>();
+builder.Services.AddScoped<ResourceProductionService>();
 
 var app = builder.Build();
 
