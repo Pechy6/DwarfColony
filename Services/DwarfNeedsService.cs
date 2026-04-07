@@ -3,7 +3,7 @@ using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Services;
 
-public class DwarfTickService
+public class DwarfNeedsService
 {
     private readonly ApplicationDbContext _context;
 
@@ -17,7 +17,7 @@ public class DwarfTickService
     private const int FitThreshold = 51;
     private const int StrainThreshold = 25;
 
-    public DwarfTickService(ApplicationDbContext context)
+    public DwarfNeedsService(ApplicationDbContext context)
     {
         _context = context;
     }

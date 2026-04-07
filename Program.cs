@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Services
 builder.Services.AddScoped<DwarfFactory>();
-builder.Services.AddScoped<DwarfTickService>();
+builder.Services.AddScoped<DwarfNeedsService>();
 builder.Services.AddScoped<TickService>();
 builder.Services.AddScoped<ResourceProductionService>();
 

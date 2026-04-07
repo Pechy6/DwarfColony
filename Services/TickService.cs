@@ -1,13 +1,13 @@
 namespace DwarfColony.Services;
 
-public class TickService(ResourceProductionService resourceProductionService, DwarfTickService dwarfTickService)
+public class TickService(ResourceProductionService resourceProductionService, DwarfNeedsService dwarfNeedsService)
 {
     private readonly ResourceProductionService _resourceProductionService = resourceProductionService;
-    private readonly DwarfTickService _dwarfTickService = dwarfTickService;
+    private readonly DwarfNeedsService _dwarfNeedsService = dwarfNeedsService;
 
     public void Tick()
     {
         _resourceProductionService.ProduceManager();
-        _dwarfTickService.Tick();
+        _dwarfNeedsService.Tick();
     }
 }
