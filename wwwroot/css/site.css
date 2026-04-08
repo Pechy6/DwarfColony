@@ -2,6 +2,12 @@ body {
     background-color: #1e1e1e;
     color: #eaeaea;
 }
+/*nav*/
+.icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 7px;
+}
 
 .avatar {
     width: 50px;
