@@ -3,10 +3,8 @@ using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Services;
 
-public class DwarfNeedsService
+public class DwarfNeedsService(ApplicationDbContext context)
 {
-    private readonly ApplicationDbContext _context;
-
     // Constants for dwarf stats
     private readonly int _energy = 2;
     private readonly int _hunger = 1;
@@ -16,11 +14,6 @@ public class DwarfNeedsService
     // Thresholds for determining dwarf status
     private const int FitThreshold = 51;
     private const int StrainThreshold = 25;
-
-    public DwarfNeedsService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
 
     public void Tick()
     {
@@ -38,7 +31,7 @@ public class DwarfNeedsService
     /// </remarks>
     private void Stats()
     {
-        var dwarves = _context.Dwarves.ToList();
+        var dwarves = context.Dwarves.ToList();
 
         foreach (var dwarf in dwarves)
         {
@@ -67,7 +60,7 @@ public class DwarfNeedsService
     /// </remarks>
     private void StatusControl()
     {
-        var dwarves = _context.Dwarves.ToList();
+        var dwarves = context.Dwarves.ToList();
         
         foreach (var dwarf in dwarves)
         {
