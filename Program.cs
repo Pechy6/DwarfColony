@@ -18,6 +18,7 @@ builder.Services.AddScoped<DwarfFactory>();
 builder.Services.AddScoped<DwarfNeedsService>();
 builder.Services.AddScoped<TickService>();
 builder.Services.AddScoped<ResourceProductionService>();
+builder.Services.AddScoped<DwarfRecoveryService>();
 
 var app = builder.Build();
 
