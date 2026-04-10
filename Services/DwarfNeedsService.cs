@@ -8,7 +8,7 @@ public class DwarfNeedsService(ApplicationDbContext context)
     // Constants for dwarf stats
     private readonly int _energy = 2;
     private readonly int _hunger = 1;
-    private readonly int _thirst = 1;
+    private readonly int _thirst = 3;
     private readonly int _jobCost = 4;
 
     // Thresholds for determining dwarf status
