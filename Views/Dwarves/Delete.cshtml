@@ -1,4 +1,4 @@
-@model DwarfColony.Models.Entities.Dwarf
+@model Dwarf
 
 @{
     ViewData["Title"] = "Release your dwarf";
@@ -7,9 +7,9 @@
 <h3 class="text-start">Are you sure you want to release <b>@Model.Name</b> ?</h3>
 <h3 class="text-start">He is your: @Model.Job</h3>
 <form asp-action="Delete">
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Id"/>
     <div class="text-start">
-        <input type="submit" value="Delete" class="btn btn-outline-danger btn-lg" />
+        <input type="submit" value="Delete" class="btn btn-outline-danger btn-lg"/>
     </div>
 </form>
 <div class="text-start mt-4">
