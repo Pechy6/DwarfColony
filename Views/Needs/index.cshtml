@@ -1,0 +1,31 @@
+@model IEnumerable<Dwarf>
+
+@{
+    ViewData["Title"] = "Dwarf needs Management";
+}
+
+<div class="table-responsive-md">
+    <table>
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Job</td>
+            <td>Hunger</td>
+            <td>Thirst</td>
+            <td>Energy</td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var dwarf in Model)
+        {
+            <tr>
+                <td>@dwarf.Name</td>
+                <td>@dwarf.Job</td>
+                <td>@dwarf.Hunger</td>
+                <td>@dwarf.Thirst</td>
+                <td>@dwarf.Energy</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
