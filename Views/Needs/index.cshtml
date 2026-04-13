@@ -1,4 +1,4 @@
-@model IEnumerable<Dwarf>
+@model NeedsViewModel
 
 @{
     ViewData["Title"] = "Dwarf needs Management";
@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var dwarf in Model)
+        @foreach (var dwarf in Model.Dwarves)
         {
             <tr>
                 <td>@dwarf.Name</td>

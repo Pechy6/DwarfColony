@@ -1,4 +1,5 @@
 using DwarfColony.Data;
+using DwarfColony.Models.ViewModels;
 using DwarfColony.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,37 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
     public IActionResult Index()
     {
         var dwarves =  _context.Dwarves.ToList();
-        return View(dwarves);
+        var storage = _context.Storages.FirstOrDefault();
+
+        if (storage is null)
+        {
+            return NotFound();
+        }
+
+        var model = new NeedsViewModel
+        {
+            Dwarves = dwarves,
+            FoodInStorage = storage.Food
+        };
+        
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Feed(NeedsViewModel model)
+    {
+        var dwarf = _context.Dwarves.Find(model.Id);
+        if (dwarf == null)
+        {
+            return NotFound();
+        }
+        
+        if (ModelState.IsValid)
+        {
+            _recoveryService.RestoreHunger(dwarf, model.FoodToUse);
+            _context.SaveChanges();
+        }
+        return RedirectToAction(nameof(Index));
     }
 }
