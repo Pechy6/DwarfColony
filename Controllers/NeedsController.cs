@@ -24,7 +24,6 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
         var model = new NeedsViewModel
         {
             Dwarves = dwarves,
-            FoodInStorage = storage.Food
         };
         
         return View(model);

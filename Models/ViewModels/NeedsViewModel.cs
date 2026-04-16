@@ -11,7 +11,7 @@ public class NeedsViewModel
     
     [Display(Name = "Food to use")]
     [Range(0, 5, ErrorMessage = "Food to use must be between 1 and 5")]
-    public int FoodToUse { get; private set; }
+    public int FoodToUse { get; set; }
     // storage 
     public int FoodInStorage { get; set; }
     

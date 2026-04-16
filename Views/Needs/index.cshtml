@@ -13,6 +13,7 @@
             <td>Hunger</td>
             <td>Thirst</td>
             <td>Energy</td>
+            <td>Feed them</td>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,16 @@
                 <td>@dwarf.Hunger</td>
                 <td>@dwarf.Thirst</td>
                 <td>@dwarf.Energy</td>
+                <td>
+                    <form asp-action="Feed">
+                        <div class="form-group">
+                            <input type="hidden" name="Id" value="@dwarf.Id" >
+                            <input asp-for="FoodToUse" class="form-control">
+                            <span asp-validation-for="FoodToUse" class="text-danger"></span>
+                            <input type="submit" value="Feed" class="btn btn-primary">
+                        </div>
+                    </form>
+                </td>
             </tr>
         }
         </tbody>
