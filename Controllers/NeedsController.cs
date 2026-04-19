@@ -41,7 +41,7 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
         
         if (ModelState.IsValid)
         {
-            _recoveryService.RestoreHunger(dwarf, model.FoodToUse);
+            _recoveryService.RestoreHunger();
             _context.SaveChanges();
         }
         return RedirectToAction(nameof(Index));

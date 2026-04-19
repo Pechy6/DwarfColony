@@ -8,38 +8,43 @@ public class DwarfRecoveryService(ApplicationDbContext context)
 {
     // max value of needs 
     private readonly int _maxValue = 100;
-    
+
     //food
+    private readonly int _needToEat = 75;
     private readonly int _foodRestoreValue = 25;
 
     // Thirst
     private readonly int _needToDrink = 60;
-    private readonly int _thirstRestoreValue = 40;
-    
+    private readonly int _thirstRestoreValue = 30;
+
     // energy
     private readonly int _energyRestoreValue = 12;
+    private readonly int _minimumEnergyToSleep = 75;
 
 
-    public void RestoreHunger(Dwarf? dwarf, int countOfFoods)
+    public void HandleAutomaticRecovery()
     {
-        if (dwarf == null || countOfFoods <= 0)
-        {
-            return;
-        }
+        RestoreThirst();
+        RestoreHunger();
+    }
 
+    public void RestoreHunger()
+    {
+        var dwarves = context.Dwarves?.ToList();
         var storages = context.Storages.FirstOrDefault();
 
-        if (storages is null)
+        if (dwarves is null || storages is null)
         {
             return;
         }
-        
-        int restoreValue = _foodRestoreValue * countOfFoods;
 
-        if (countOfFoods <= storages.Food)
+        foreach (var dwarf in dwarves)
         {
-            dwarf.Hunger = Math.Min(_maxValue, dwarf.Hunger + restoreValue);
-            storages.Food -= countOfFoods;
+            if (storages.Food >= 1 && dwarf.Hunger < _needToEat)
+            {
+                dwarf.Hunger = Math.Min(_maxValue, dwarf.Hunger + _foodRestoreValue);
+                storages.Food--;
+            }
         }
     }
 
@@ -49,15 +54,10 @@ public class DwarfRecoveryService(ApplicationDbContext context)
         {
             return;
         }
-        
-        int restoreValue = _energyRestoreValue * hoursToSleep;
-        
-        dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + restoreValue);
-    }
 
-    public void HandleAutomaticRecovery()
-    {
-        RestoreThirst();
+        int restoreValue = _energyRestoreValue * hoursToSleep;
+
+        dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + restoreValue);
     }
 
     private void RestoreThirst()
