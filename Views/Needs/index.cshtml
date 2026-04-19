@@ -3,9 +3,16 @@
 @{
     ViewData["Title"] = "Dwarf needs Management";
 }
-
-<div class="table-responsive-md">
-    <table>
+<form asp-action="Sleep">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group mb-3">
+        <label asp-for="TimeToSleep"></label>
+        <input asp-for="TimeToSleep" class="form-control"/>
+        <span asp-validation-for="TimeToSleep" class="text-danger"></span>
+    </div>
+    
+    <table class="table table-dark">
         <thead>
         <tr>
             <td>Name</td>
@@ -13,7 +20,7 @@
             <td>Hunger</td>
             <td>Thirst</td>
             <td>Energy</td>
-            <td>Feed them</td>
+            <td>Choose</td>
         </tr>
         </thead>
         <tbody>
@@ -26,17 +33,12 @@
                 <td>@dwarf.Thirst</td>
                 <td>@dwarf.Energy</td>
                 <td>
-                    <form asp-action="Feed">
-                        <div class="form-group">
-                            <input type="hidden" name="Id" value="@dwarf.Id" >
-                            <input asp-for="FoodToUse" class="form-control">
-                            <span asp-validation-for="FoodToUse" class="text-danger"></span>
-                            <input type="submit" value="Feed" class="btn btn-primary">
-                        </div>
-                    </form>
+                    <input type="checkbox" name="SelectedDwarvesIds" value="@dwarf.Id">
                 </td>
             </tr>
         }
         </tbody>
     </table>
-</div>
+    
+    <button type="submit" class="btn btn-primary">Sleep</button>
+</form>

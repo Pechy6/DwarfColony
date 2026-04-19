@@ -9,10 +9,11 @@ public class NeedsViewModel
     public int Id { get; set; }
     public List<Dwarf> Dwarves { get; set; } = new();
     
-    [Display(Name = "Food to use")]
-    [Range(0, 5, ErrorMessage = "Food to use must be between 1 and 5")]
-    public int FoodToUse { get; set; }
-    // storage 
-    public int FoodInStorage { get; set; }
+    
+    [DisplayName("Time to sleep (hours)")]
+    [Range(1, 12, ErrorMessage = "Time to sleep must be between 1 and 12 hours")]
+    public int TimeToSleep { get; set; }
+    
+    public List<int> SelectedDwarvesIds { get; set; } = new();
     
 }

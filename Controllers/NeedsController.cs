@@ -31,17 +31,21 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Feed(NeedsViewModel model)
+    public IActionResult Sleep(NeedsViewModel model)
     {
-        var dwarf = _context.Dwarves.Find(model.Id);
-        if (dwarf == null)
+        if (model.TimeToSleep <=0 || model.SelectedDwarvesIds == null || !model.SelectedDwarvesIds.Any())
         {
-            return NotFound();
+            return View(nameof(Index), model);
         }
         
+        var dwarves = _context.Dwarves.Where(d => model.SelectedDwarvesIds.Contains(d.Id)).ToList();
+
+        foreach (var dwarf in dwarves)
+        {
+            _recoveryService.RestoreEnergy(dwarf, model.TimeToSleep);
+        }
         if (ModelState.IsValid)
         {
-            _recoveryService.RestoreHunger();
             _context.SaveChanges();
         }
         return RedirectToAction(nameof(Index));
