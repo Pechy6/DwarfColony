@@ -13,7 +13,20 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
     // GET
     public IActionResult Index()
     {
-        var dwarves =  _context.Dwarves.ToList();
+        var dwarves = _context.
+            Dwarves.
+            Select(dwarf => new DwarfSleepRowViewModel
+            {
+                Id = dwarf.Id,
+                Name = dwarf.Name,
+                Job = dwarf.Job.ToString(),
+                Hunger = dwarf.Hunger,
+                Thirst = dwarf.Thirst,
+                Energy = dwarf.Energy,
+                CanSleep = _recoveryService.CanSleep(dwarf)
+            }).
+            ToList();
+        
         var storage = _context.Storages.FirstOrDefault();
 
         if (storage is null)
@@ -23,9 +36,9 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
 
         var model = new NeedsViewModel
         {
-            Dwarves = dwarves,
+            Dwarves = dwarves
         };
-        
+
         return View(model);
     }
 
@@ -33,21 +46,26 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
     [ValidateAntiForgeryToken]
     public IActionResult Sleep(NeedsViewModel model)
     {
-        if (model.TimeToSleep <=0 || model.SelectedDwarvesIds == null || !model.SelectedDwarvesIds.Any())
+        if (model.TimeToSleep <= 0 || model.SelectedDwarvesIds == null || !model.SelectedDwarvesIds.Any())
         {
             return View(nameof(Index), model);
         }
-        
-        var dwarves = _context.Dwarves.Where(d => model.SelectedDwarvesIds.Contains(d.Id)).ToList();
+
+        var dwarves = _context.
+            Dwarves.
+            Where(d => model.SelectedDwarvesIds.Contains(d.Id)).
+            ToList();
 
         foreach (var dwarf in dwarves)
         {
             _recoveryService.RestoreEnergy(dwarf, model.TimeToSleep);
         }
+
         if (ModelState.IsValid)
         {
             _context.SaveChanges();
         }
+
         return RedirectToAction(nameof(Index));
     }
 }

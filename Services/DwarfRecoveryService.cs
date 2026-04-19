@@ -28,6 +28,7 @@ public class DwarfRecoveryService(ApplicationDbContext context)
         RestoreHunger();
     }
 
+    // Hunger
     public void RestoreHunger()
     {
         var dwarves = context.Dwarves?.ToList();
@@ -48,6 +49,7 @@ public class DwarfRecoveryService(ApplicationDbContext context)
         }
     }
 
+    // Energy
     public void RestoreEnergy(Dwarf? dwarf, int hoursToSleep)
     {
         if (dwarf == null || hoursToSleep <= 0)
@@ -57,9 +59,23 @@ public class DwarfRecoveryService(ApplicationDbContext context)
 
         int restoreValue = _energyRestoreValue * hoursToSleep;
 
-        dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + restoreValue);
+        if (dwarf.Energy < _minimumEnergyToSleep)
+        {
+            dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + restoreValue);
+        }
     }
 
+    public bool CanSleep(Dwarf? dwarf)
+    {
+        if (dwarf == null)
+        {
+            return false;
+        }
+        
+        return dwarf.Energy < _minimumEnergyToSleep;
+    }
+
+    // Thirst
     private void RestoreThirst()
     {
         var dwarves = context.Dwarves?.ToList();

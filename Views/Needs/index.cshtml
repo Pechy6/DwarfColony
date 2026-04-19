@@ -33,7 +33,14 @@
                 <td>@dwarf.Thirst</td>
                 <td>@dwarf.Energy</td>
                 <td>
-                    <input type="checkbox" name="SelectedDwarvesIds" value="@dwarf.Id">
+                    @if (dwarf.CanSleep)
+                    {
+                        <input type="checkbox" name="SelectedDwarvesIds" value="@dwarf.Id"/>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Cant sleep</span>
+                    }
                 </td>
             </tr>
         }
