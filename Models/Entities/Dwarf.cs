@@ -17,6 +17,15 @@ public enum DwarfStatus
     Exhausted
 }
 
+public enum DwarfState
+{
+    Idle,
+    Working,
+    Sleeping,
+    Eating,
+    Dead
+}
+
 public class Dwarf
 {
     public int Id { get; set; }
@@ -30,4 +39,6 @@ public class Dwarf
     public DwarfJob Job { get; set; } = DwarfJob.None;
 
     public DwarfStatus Status { get; set; } = DwarfStatus.Fit;
+    
+    public DwarfState State { get; set; } = DwarfState.Idle;
 }
