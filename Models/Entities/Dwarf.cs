@@ -41,4 +41,7 @@ public class Dwarf
     public DwarfStatus Status { get; set; } = DwarfStatus.Fit;
     
     public DwarfState State { get; set; } = DwarfState.Idle;
+    
+    // čas pro spánek
+    public int ActionRemainingTime { get; set; }
 }
