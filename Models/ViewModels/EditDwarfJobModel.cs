@@ -3,12 +3,10 @@ using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Models.ViewModels;
 
-public class EditDwarfModel
+public class EditDwarfJobModel
 {
     public int Id { get; set; }
-    [Required]
-    [StringLength(20, MinimumLength = 3, ErrorMessage = "Name must be between 4 and 20 characters")]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
     
     public DwarfJob Job { get; set; } = DwarfJob.None;
 }

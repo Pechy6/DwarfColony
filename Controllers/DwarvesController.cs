@@ -69,7 +69,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
             return NotFound();
         }
 
-        var editDwarfModel = new EditDwarfModel
+        var editDwarfModel = new EditDwarfJobModel
         {
             Id = dwarfEntity.Id,
             Name = dwarfEntity.Name,
@@ -81,9 +81,9 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(int id, EditDwarfModel editDwarfModel)
+    public IActionResult Edit(int id, EditDwarfJobModel editDwarfJobModel)
     {
-        if (id != editDwarfModel.Id)
+        if (id != editDwarfJobModel.Id)
         {
             return NotFound();
         }
@@ -96,13 +96,12 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         
         if (ModelState.IsValid)
         {
-            dwarfEntity.Name = editDwarfModel.Name;
-            dwarfEntity.Job = editDwarfModel.Job;
+            dwarfEntity.Job = editDwarfJobModel.Job;
             
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        return View(editDwarfModel);
+        return View(editDwarfJobModel);
     }
 
     public IActionResult Delete(int? id)
