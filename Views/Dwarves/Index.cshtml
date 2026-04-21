@@ -14,6 +14,8 @@
             <th>Thirst</th>
             <th>IsAlive</th>
             <th>Job</th>
+            <th>Status</th>
+            <th>State</th>
             <th>Change job</th>
             <th>Delete</th>
         </tr>
@@ -30,6 +32,8 @@
                 <td>@dwarf.Thirst</td>
                 <td>@dwarf.IsAlive</td>
                 <td>@dwarf.Job</td>
+                <td>@dwarf.Status</td>
+                <td>@dwarf.State</td>
                 <td><a asp-controller="Dwarves" asp-action="Edit" asp-route-id="@dwarf.Id" class="table-edit">Change job</a>
                 </td>
                 <td><a asp-controller="Dwarves" asp-action="Delete" asp-route-id="@dwarf.Id"

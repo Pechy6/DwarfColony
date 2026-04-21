@@ -23,6 +23,8 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
                 Hunger = dwarf.Hunger,
                 Thirst = dwarf.Thirst,
                 Energy = dwarf.Energy,
+                Status = dwarf.Status.ToString(),
+                State = dwarf.State.ToString(),
                 CanSleep = _recoveryService.CanSleep(dwarf)
             }).
             ToList();

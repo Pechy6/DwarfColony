@@ -8,5 +8,7 @@ public class DwarfSleepRowViewModel
     public int Hunger { get; set; }
     public int Thirst { get; set; }
     public int Energy { get; set; }
+    public string Status { get; set; }
+    public string State { get; set; }
     public bool CanSleep { get; set; }
 }
