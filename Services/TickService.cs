@@ -11,5 +11,6 @@ public class TickService(ResourceProductionService resourceProductionService, Dw
         _resourceProductionService.ProduceManager();
         _dwarfNeedsService.Tick();
         _dwarfRecoveryService.HandleAutomaticRecovery();
+        _dwarfRecoveryService.HandleSleepTick();
     }
 }
