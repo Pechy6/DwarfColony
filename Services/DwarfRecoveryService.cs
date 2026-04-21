@@ -17,7 +17,7 @@ public class DwarfRecoveryService(ApplicationDbContext context)
     private readonly int _needToDrink = 60;
     private readonly int _thirstRestoreValue = 30;
 
-    // energy
+    // energy (sleep)
     private readonly int _energyRestoreValue = 12;
     private readonly int _minimumEnergyToSleep = 75;
 
@@ -28,8 +28,17 @@ public class DwarfRecoveryService(ApplicationDbContext context)
         RestoreHunger();
     }
 
-    // Hunger
-    public void RestoreHunger()
+    public void HandleSleepTick()
+    {
+        ProcessSleepTick();
+    }
+    
+    //Automatic recovery (hunger, thirst)
+
+    /// <summary>
+    /// Obnoví hlad trpaslíků pomocí dostupných zásob jídla ve skladu.
+    /// </summary>
+    private void RestoreHunger()
     {
         var dwarves = context.Dwarves?.ToList();
         var storages = context.Storages.FirstOrDefault();
@@ -48,34 +57,10 @@ public class DwarfRecoveryService(ApplicationDbContext context)
             }
         }
     }
-
-    // Energy
-    public void RestoreEnergy(Dwarf? dwarf, int hoursToSleep)
-    {
-        if (dwarf == null || hoursToSleep <= 0)
-        {
-            return;
-        }
-
-        int restoreValue = _energyRestoreValue * hoursToSleep;
-
-        if (dwarf.Energy < _minimumEnergyToSleep)
-        {
-            dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + restoreValue);
-        }
-    }
-
-    public bool CanSleep(Dwarf? dwarf)
-    {
-        if (dwarf == null)
-        {
-            return false;
-        }
-        
-        return dwarf.Energy < _minimumEnergyToSleep;
-    }
-
-    // Thirst
+    
+    /// <summary>
+    /// Obnoví žízeň trpaslíků pomocí dostupných zásob vody ve skladu.
+    /// </summary>
     private void RestoreThirst()
     {
         var dwarves = context.Dwarves?.ToList();
@@ -94,5 +79,68 @@ public class DwarfRecoveryService(ApplicationDbContext context)
                 storages.Water--;
             }
         }
+    }
+    
+    // Handle sleep
+    
+    public void SetSleep(Dwarf? dwarf, int hoursToSleep)
+    {
+        if (dwarf == null || hoursToSleep <= 0)
+        {
+            return;
+        }
+
+        if (CanSleep(dwarf))
+        {
+            if (dwarf.State != DwarfState.Sleeping)
+            {
+                dwarf.State = DwarfState.Sleeping;
+                dwarf.ActionRemainingTime = hoursToSleep;
+            }
+        }
+    }
+
+    private void ProcessSleepTick()
+    {
+        var dwarves = context.Dwarves?.ToList();
+
+        if (dwarves is null)
+        {
+            return;
+        }
+
+        var sleepingDwarves = dwarves.Where(d => d.State == DwarfState.Sleeping);
+
+        foreach (var dwarf in sleepingDwarves)
+        {
+            if (dwarf.ActionRemainingTime > 0)
+            {
+                dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + _energyRestoreValue);    
+                dwarf.ActionRemainingTime--;
+            }
+            
+            
+            if (dwarf.ActionRemainingTime <= 0 || dwarf.Energy >= _maxValue)
+            {
+                dwarf.State = DwarfState.Idle;
+                dwarf.ActionRemainingTime = 0;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Vrací, zda může trpaslík spát podle aktuální úrovně energie.
+    /// </summary>
+    /// <param name="dwarf">Trpaslík, který se má vyhodnotit. Nesmí být <c>null</c>.</param>
+    /// <returns><c>true</c>, pokud je energie trpaslíka nižší než minimální hodnota pro spánek; jinak <c>false</c>.</returns>
+    public bool CanSleep(Dwarf? dwarf)
+    {
+        if (dwarf == null)
+        {
+            return false;
+        }
+
+        return dwarf.Energy < _minimumEnergyToSleep;
     }
 }

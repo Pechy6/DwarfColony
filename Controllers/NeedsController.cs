@@ -26,13 +26,6 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
                 CanSleep = _recoveryService.CanSleep(dwarf)
             }).
             ToList();
-        
-        var storage = _context.Storages.FirstOrDefault();
-
-        if (storage is null)
-        {
-            return NotFound();
-        }
 
         var model = new NeedsViewModel
         {
@@ -46,7 +39,7 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
     [ValidateAntiForgeryToken]
     public IActionResult Sleep(NeedsViewModel model)
     {
-        if (model.TimeToSleep <= 0 || model.SelectedDwarvesIds == null || !model.SelectedDwarvesIds.Any())
+        if (model.TimeToSleep <= 0 || !model.SelectedDwarvesIds.Any())
         {
             return View(nameof(Index), model);
         }
@@ -58,7 +51,7 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
 
         foreach (var dwarf in dwarves)
         {
-            _recoveryService.RestoreEnergy(dwarf, model.TimeToSleep);
+            _recoveryService.SetSleep(dwarf, model.TimeToSleep);
         }
 
         if (ModelState.IsValid)
