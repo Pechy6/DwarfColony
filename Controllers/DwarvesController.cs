@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DwarfColony.Controllers;
 
-public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, TickService tickService) : Controller
+public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, TickService tickService, DwarfStateService dwarfStateService) : Controller
 {
     private readonly ApplicationDbContext _context = context;
     private readonly DwarfFactory _dwarfFactory = dwarfFactory;
     private readonly TickService _tickService = tickService;
+    private readonly DwarfStateService _dwarfStateService = dwarfStateService;
 
     // GET
     public IActionResult Index()
@@ -97,7 +98,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         if (ModelState.IsValid)
         {
             dwarfEntity.Job = editDwarfJobModel.Job;
-            
+            _dwarfStateService.ChangeState(dwarfEntity);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
