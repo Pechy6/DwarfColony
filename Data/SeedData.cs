@@ -46,20 +46,31 @@ public class SeedData
         
             context.SaveChanges();   
         }
+        
+        // if (!context.Storages.Any())
+        // {
+        //     context.Storages.Add(new Storage()
+        //     {
+        //         RawFood = 100,
+        //         Food = 50,
+        //         Water = 100,
+        //         Coal = 35,
+        //         Stone = 50,
+        //         IronCore = 20,
+        //         Wood = 100
+        //     });
+        //     context.SaveChanges();  
+        // }
 
-        if (!context.Storages.Any())
-        {
-            context.Storages.Add(new Storage()
-            {
-                RawFood = 100,
-                Food = 50,
-                Water = 100,
-                Coal = 35,
-                Stone = 50,
-                IronCore = 20,
-                Wood = 100
-            });
-            context.SaveChanges();  
-        }
+        // if (context.Storages.Any())
+        // {
+        //     var storage = context.Storages.Find(1);
+        //
+        //     if (storage != null)
+        //     {
+        //         storage.Water = 200;
+        //         context.SaveChanges(); 
+        //     }
+        // }
     }
 }

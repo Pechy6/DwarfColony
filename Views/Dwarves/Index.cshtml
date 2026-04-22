@@ -12,7 +12,6 @@
             <th>Energy</th>
             <th>Hunger</th>
             <th>Thirst</th>
-            <th>IsAlive</th>
             <th>Job</th>
             <th>Status</th>
             <th>State</th>
@@ -20,7 +19,7 @@
             <th>Delete</th>
         </tr>
         </thead>
-        <tbody class="">
+        <tbody>
         @foreach (var dwarf in Model)
         {
             <tr>
@@ -30,7 +29,6 @@
                 <td>@dwarf.Energy</td>
                 <td>@dwarf.Hunger</td>
                 <td>@dwarf.Thirst</td>
-                <td>@dwarf.IsAlive</td>
                 <td>@dwarf.Job</td>
                 <td>@dwarf.Status</td>
                 <td>@dwarf.State</td>

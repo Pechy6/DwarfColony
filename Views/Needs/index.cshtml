@@ -5,51 +5,56 @@
 }
 <form asp-action="Sleep">
     @Html.AntiForgeryToken()
-    
-    <div class="form-group mb-3">
-        <label asp-for="TimeToSleep"></label>
-        <input asp-for="TimeToSleep" class="form-control"/>
-        <span asp-validation-for="TimeToSleep" class="text-danger"></span>
-    </div>
-    
-    <table class="table table-dark">
-        <thead>
-        <tr>
-            <td>Name</td>
-            <td>Job</td>
-            <td>Hunger</td>
-            <td>Thirst</td>
-            <td>Energy</td>
-            <td>Status</td>
-            <td>State</td>
-            <td>Choose</td>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var dwarf in Model.Dwarves)
-        {
+
+    <div class="table-responsive-md">
+        <table class="table table-dark table-hover">
+            <thead class="table-danger">
             <tr>
-                <td>@dwarf.Name</td>
-                <td>@dwarf.Job</td>
-                <td>@dwarf.Hunger</td>
-                <td>@dwarf.Thirst</td>
-                <td>@dwarf.Energy</td>
-                <td>@dwarf.Status</td>
-                <td>@dwarf.State</td>
-                <td>
-                    @if (dwarf.CanSleep)
-                    {
-                        <input type="checkbox" name="SelectedDwarvesIds" value="@dwarf.Id"/>
-                    }
-                    else
-                    {
-                        <span class="text-danger">Cant sleep</span>
-                    }
-                </td>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Energy</th>
+                <th>Hunger</th>
+                <th>Thirst</th>
+                <th>Job</th>
+                <th>Status</th>
+                <th>State</th>
+                <th>Set sleep</th>
             </tr>
-        }
-        </tbody>
-    </table>
-    
-    <button type="submit" class="btn btn-primary">Sleep</button>
+            </thead>
+            <tbody>
+            @foreach (var dwarf in Model.Dwarves)
+            {
+                <tr>
+                    <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id"
+                           class="table-text">@dwarf.Name</a></td>
+                    <td>@dwarf.Age</td>
+                    <td>@dwarf.Energy</td>
+                    <td>@dwarf.Hunger</td>
+                    <td>@dwarf.Thirst</td>
+                    <td>@dwarf.Job</td>
+                    <td>@dwarf.Status</td>
+                    <td>@dwarf.State</td>
+                    <td>
+                        @if (dwarf.CanSleep)
+                        {
+                            <input type="checkbox" name="SelectedDwarvesIds" value="@dwarf.Id"/>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Cant sleep</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        <div class="form-group mb-3">
+            <label asp-for="TimeToSleep"></label>
+            <input asp-for="TimeToSleep" class="form-control"/>
+            <span asp-validation-for="TimeToSleep" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Sleep</button>
+    </div>
 </form>

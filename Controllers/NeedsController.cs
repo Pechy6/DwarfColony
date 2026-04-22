@@ -19,6 +19,7 @@ public class NeedsController(ApplicationDbContext context, DwarfRecoveryService 
             {
                 Id = dwarf.Id,
                 Name = dwarf.Name,
+                Age = dwarf.Age,
                 Job = dwarf.Job.ToString(),
                 Hunger = dwarf.Hunger,
                 Thirst = dwarf.Thirst,
