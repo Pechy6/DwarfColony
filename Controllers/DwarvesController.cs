@@ -99,6 +99,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             dwarfEntity.Job = editDwarfJobModel.Job;
             _dwarfStateService.ChangeState(dwarfEntity);
+            
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DwarfColony.Services;
 
-public class DwarfRecoveryService(ApplicationDbContext context)
+public class DwarfRecoveryService(ApplicationDbContext context, DwarfStateService dwarfStateService)
 {
     // max value of needs 
     private readonly int _maxValue = 100;
@@ -32,7 +32,7 @@ public class DwarfRecoveryService(ApplicationDbContext context)
     {
         ProcessSleepTick();
     }
-    
+
     //Automatic recovery (hunger, thirst)
 
     /// <summary>
@@ -57,7 +57,7 @@ public class DwarfRecoveryService(ApplicationDbContext context)
             }
         }
     }
-    
+
     /// <summary>
     /// Obnoví žízeň trpaslíků pomocí dostupných zásob vody ve skladu.
     /// </summary>
@@ -80,9 +80,9 @@ public class DwarfRecoveryService(ApplicationDbContext context)
             }
         }
     }
-    
+
     // Handle sleep
-    
+
     public void SetSleep(Dwarf? dwarf, int hoursToSleep)
     {
         if (dwarf == null || hoursToSleep <= 0)
@@ -115,14 +115,14 @@ public class DwarfRecoveryService(ApplicationDbContext context)
         {
             if (dwarf.ActionRemainingTime > 0)
             {
-                dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + _energyRestoreValue);    
+                dwarf.Energy = Math.Min(_maxValue, dwarf.Energy + _energyRestoreValue);
                 dwarf.ActionRemainingTime--;
             }
-            
-            
+
+
             if (dwarf.ActionRemainingTime <= 0 || dwarf.Energy >= _maxValue)
             {
-                dwarf.State = DwarfState.Idle;
+                dwarfStateService.RestoreStateAfterSleeping(dwarf);
                 dwarf.ActionRemainingTime = 0;
             }
         }

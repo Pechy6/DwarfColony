@@ -3,22 +3,31 @@ using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Services;
 
-public class DwarfStateService(ApplicationDbContext context)
+public class DwarfStateService
 {
-    private readonly ApplicationDbContext _context = context;
 
     public void ChangeState(Dwarf dwarf)
     {
-        if (dwarf.State != DwarfState.Sleeping)
+        if (dwarf.State == DwarfState.Sleeping)
         {
-            if (dwarf.Job == DwarfJob.None)
-            {
-                dwarf.State = DwarfState.Idle;
-            }
-            else
-            {
-                dwarf.State = DwarfState.Working;
-            }
+            return;
         }
+
+        dwarf.State = GetStateByJob(dwarf);
+    }
+
+    public void RestoreStateAfterSleeping(Dwarf dwarf)
+    {
+        if (dwarf.State == DwarfState.Sleeping)
+        {
+            dwarf.State = GetStateByJob(dwarf);
+        }
+    }
+
+private DwarfState GetStateByJob(Dwarf dwarf)
+    {
+        return dwarf.Job == DwarfJob.None
+            ? DwarfState.Idle
+            : DwarfState.Working;
     }
 }
