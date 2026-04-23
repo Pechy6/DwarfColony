@@ -3,10 +3,9 @@ using DwarfColony.Models.Entities;
 
 namespace DwarfColony.Services;
 
-public class ResourceProductionService
+public class ResourceProductionService(ApplicationDbContext context)
 {
     // Database context
-    private readonly ApplicationDbContext _context;
 
     // Resources produced by dwarves
     private readonly int _rawFood = 1;
@@ -18,11 +17,6 @@ public class ResourceProductionService
 
     // Random number generator
     private readonly Random _random = new Random();
-
-    public ResourceProductionService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
 
     public void ProduceManager()
     {
@@ -45,12 +39,14 @@ public class ResourceProductionService
     /// </exception>
     private void Produce()
     {
-        var dwarves = _context.Dwarves.ToList();
-        var storage = _context.Storages.FirstOrDefault() ?? throw new Exception("No storage found");
+        var dwarves = context.Dwarves.ToList();
+        var storage = context.Storages.FirstOrDefault() ?? throw new Exception("No storage found");
 
-        var resources = GetRandomResource();
         foreach (var dwarf in dwarves)
         {
+            if (IsDwarfSleeping(dwarf))
+                continue;
+
             if (dwarf.Job == DwarfJob.Cook)
             {
                 storage.Food += _rawFood;
@@ -58,6 +54,8 @@ public class ResourceProductionService
 
             else if (dwarf.Job == DwarfJob.Miner)
             {
+                var resources = GetRandomResource();
+                
                 if (resources == 0)
                 {
                     storage.Stone += _stone;
@@ -86,5 +84,10 @@ public class ResourceProductionService
     private int GetRandomResource()
     {
         return _random.Next(0, 3);
+    }
+
+    private bool IsDwarfSleeping(Dwarf dwarf)
+    {
+        return dwarf.State == DwarfState.Sleeping;
     }
 }

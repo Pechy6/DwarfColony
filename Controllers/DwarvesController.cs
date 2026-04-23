@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DwarfColony.Controllers;
 
-public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfFactory, TickService tickService, DwarfStateService dwarfStateService) : Controller
+public class DwarvesController(
+    ApplicationDbContext context,
+    DwarfFactory dwarfFactory,
+    TickService tickService,
+    DwarfStateService dwarfStateService) : Controller
 {
     private readonly ApplicationDbContext _context = context;
     private readonly DwarfFactory _dwarfFactory = dwarfFactory;
@@ -25,18 +29,19 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         CreateDwarfModel dwarfModel = new();
         return View(dwarfModel);
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(CreateDwarfModel createDwarfModel)
     {
         if (ModelState.IsValid)
         {
-            Dwarf dwarf = _dwarfFactory.Create(createDwarfModel);
+            var dwarf = _dwarfFactory.Create(createDwarfModel);
             _context.Dwarves.Add(dwarf);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+
         return View(createDwarfModel);
     }
 
@@ -46,14 +51,14 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             return NotFound();
         }
-        
+
         var dwarfEntity = _context.Dwarves.Find(id);
-        
+
         if (dwarfEntity == null)
         {
             return NotFound();
         }
-        
+
         return View(dwarfEntity);
     }
 
@@ -63,8 +68,9 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             return NotFound();
         }
+
         var dwarfEntity = _context.Dwarves.Find(id);
-        
+
         if (dwarfEntity == null)
         {
             return NotFound();
@@ -76,7 +82,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
             Name = dwarfEntity.Name,
             Job = dwarfEntity.Job
         };
-        
+
         return View(editDwarfModel);
     }
 
@@ -94,15 +100,16 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             return NotFound();
         }
-        
+
         if (ModelState.IsValid)
         {
             dwarfEntity.Job = editDwarfJobModel.Job;
             _dwarfStateService.ChangeState(dwarfEntity);
-            
+
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+
         return View(editDwarfJobModel);
     }
 
@@ -119,7 +126,7 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             return NotFound();
         }
-        
+
         return View(dwarfEntity);
     }
 
@@ -133,11 +140,11 @@ public class DwarvesController(ApplicationDbContext context, DwarfFactory dwarfF
         {
             _context.Dwarves.Remove(dwarfEntity);
         }
-        
+
         _context.SaveChanges();
         return RedirectToAction(nameof(Index));
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Tick()

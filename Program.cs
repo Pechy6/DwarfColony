@@ -20,6 +20,7 @@ builder.Services.AddScoped<TickService>();
 builder.Services.AddScoped<ResourceProductionService>();
 builder.Services.AddScoped<DwarfRecoveryService>();
 builder.Services.AddScoped<DwarfStateService>();
+builder.Services.AddScoped<SortItems>();
 
 var app = builder.Build();
 
