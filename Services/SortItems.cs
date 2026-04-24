@@ -5,38 +5,27 @@ namespace DwarfColony.Services;
 
 public class SortItems
 {
-    public IEnumerable<Dwarf> SortByName(ApplicationDbContext context)
+    public IQueryable<Dwarf> Sort(ApplicationDbContext context, string? sortOrder)
     {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Name);
-    }
-    
-    public IQueryable<Dwarf> SortByAge(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Age);
-    }
-    
-    public IQueryable<Dwarf> SortByEnergy(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Energy);
-    }
-    
-    public IQueryable<Dwarf> SortByHunger(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Hunger);
-    }
-    
-    public IQueryable<Dwarf> SortByThirst(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Thirst);
-    }
-    
-    public IQueryable<Dwarf> SortByState(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.State);
-    }
-
-    public IQueryable<Dwarf> SortByJob(ApplicationDbContext context)
-    {
-        return context.Dwarves.OrderBy(dwarf => dwarf.Job);
+        return sortOrder switch
+        {
+            "name" => context.Dwarves.OrderBy(d => d.Name),
+            "name_desc" => context.Dwarves.OrderByDescending(d => d.Name),
+            "age" => context.Dwarves.OrderBy(d => d.Age),
+            "age_desc" => context.Dwarves.OrderByDescending(d => d.Age),
+            "energy" => context.Dwarves.OrderBy(d => d.Energy),
+            "energy_desc" => context.Dwarves.OrderByDescending(d => d.Energy),
+            "hunger" => context.Dwarves.OrderBy(d => d.Hunger),
+            "hunger_desc" => context.Dwarves.OrderByDescending(d => d.Hunger),
+            "thirst" => context.Dwarves.OrderBy(d => d.Thirst),
+            "thirst_desc" => context.Dwarves.OrderByDescending(d => d.Thirst),
+            "state" => context.Dwarves.OrderBy(d => d.State),
+            "state_desc" => context.Dwarves.OrderByDescending(d => d.State),
+            "job" => context.Dwarves.OrderBy(d => d.Job),
+            "job_desc" => context.Dwarves.OrderByDescending(d => d.Job),
+            "status" => context.Dwarves.OrderBy(d => d.Status),
+            "status_desc" => context.Dwarves.OrderByDescending(d => d.Status),
+            _ => context.Dwarves.OrderBy(d => d.Name)
+        };
     }
 }
