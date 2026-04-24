@@ -1,4 +1,4 @@
-@model IEnumerable<Dwarf>
+@model IndexViewModel
 @{
     ViewData["Title"] = "Dwarf Base";
 }
@@ -7,20 +7,20 @@
     <table class="table table-dark table-hover">
         <thead class="table-danger">
         <tr>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="name">Name</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="age">Age</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="energy">Energy</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="hunger">Hunger</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="thirst">Thirst</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="job">Job</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="status">Status</a></th>
-            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="state">State</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.NameSort">Name</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.AgeSort">Age</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.EnergySort">Energy</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.HungerSort">Hunger</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.ThirstSort">Thirst</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.JobSort">Job</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.StatusSort">Status</a></th>
+            <th><a asp-controller="Dwarves" asp-action="Index" asp-route-sortOrder="@Model.StateSort">State</a></th>
             <th>Change job</th>
             <th>Delete</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var dwarf in Model)
+        @foreach (var dwarf in Model.Dwarves)
         {
             <tr>
                 <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id"
