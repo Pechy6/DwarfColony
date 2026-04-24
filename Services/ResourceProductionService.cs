@@ -5,16 +5,6 @@ namespace DwarfColony.Services;
 
 public class ResourceProductionService(ApplicationDbContext context)
 {
-    // Database context
-
-    // Resources produced by dwarves
-    private readonly int _rawFood = 1;
-    private readonly int _wather = 1;
-    private readonly int _stone = 1;
-    private readonly int _ironCore = 1;
-    private readonly int _coal = 1;
-    private readonly int _wood = 1;
-
     // Random number generator
     private readonly Random _random = new Random();
 
@@ -46,33 +36,34 @@ public class ResourceProductionService(ApplicationDbContext context)
         {
             if (IsDwarfSleeping(dwarf))
                 continue;
+            var producedMaterial = ProductionResourceByStatus(dwarf);
 
             if (dwarf.Job == DwarfJob.Cook)
             {
-                storage.Food += _rawFood;
+                storage.Food += producedMaterial;
             }
 
             else if (dwarf.Job == DwarfJob.Miner)
             {
                 var resources = GetRandomResource();
-                
+
                 if (resources == 0)
                 {
-                    storage.Stone += _stone;
+                    storage.Stone += producedMaterial;
                 }
                 else if (resources == 1)
                 {
-                    storage.IronCore += _ironCore;
+                    storage.IronCore += producedMaterial;
                 }
                 else
                 {
-                    storage.Coal += _coal;
+                    storage.Coal += producedMaterial;
                 }
             }
 
             else if (dwarf.Job == DwarfJob.Woodcutter)
             {
-                storage.Wood += _wood;
+                storage.Wood += producedMaterial;
             }
         }
     }
@@ -86,8 +77,37 @@ public class ResourceProductionService(ApplicationDbContext context)
         return _random.Next(0, 3);
     }
 
+    /// <summary>
+    /// Vrací náhodnou hodnotu 0 nebo 1.
+    /// Používá se pro určení, zda trpaslík ve špatném stavu vyprodukuje alespoň 1 jednotku surovin, nebo nic.
+    /// </summary>
+    /// <returns>0 nebo 1.</returns>
+    private int GetRandomChance()
+    {
+        return _random.Next(0, 2);
+    }
+
     private bool IsDwarfSleeping(Dwarf dwarf)
     {
         return dwarf.State == DwarfState.Sleeping;
+    }
+
+    /// <summary>
+    /// Určuje množství surovin vyprodukovaných trpaslíkem podle jeho aktuálního stavu.
+    /// Trpaslík ve stavu Fit vyprodukuje 2 jednotky.
+    /// Trpaslík ve stavu Strained vyprodukuje 1 jednotku.
+    /// Trpaslík ve zhoršeném stavu má náhodnou šanci vyprodukovat 1 jednotku, nebo nic.
+    /// </summary>
+    /// <param name="dwarf">Trpaslík, pro kterého se počítá produkce surovin. Jeho stav určuje výsledné množství.</param>
+    /// <returns>Počet jednotek surovin vyprodukovaných trpaslíkem. Hodnota může být 0, 1 nebo 2 podle stavu a náhody.</returns>
+    private int ProductionResourceByStatus(Dwarf dwarf)
+    {
+        if (dwarf.Status == DwarfStatus.Fit)
+            return 2;
+        if (dwarf.Status == DwarfStatus.Strained)
+            return 1;
+        return GetRandomChance() == 0
+            ? 1
+            : 0;
     }
 }
