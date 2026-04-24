@@ -10,17 +10,20 @@ public class DwarvesController(
     ApplicationDbContext context,
     DwarfFactory dwarfFactory,
     TickService tickService,
-    DwarfStateService dwarfStateService) : Controller
+    DwarfStateService dwarfStateService,
+    SortItems sortItems) : Controller
 {
     private readonly ApplicationDbContext _context = context;
     private readonly DwarfFactory _dwarfFactory = dwarfFactory;
     private readonly TickService _tickService = tickService;
     private readonly DwarfStateService _dwarfStateService = dwarfStateService;
+    private readonly SortItems _sortItems = sortItems;
+    
 
     // GET
-    public IActionResult Index()
+    public IActionResult Index(string? sortOrder)
     {
-        var dwarves = _context.Dwarves.ToList();
+        var dwarves = _sortItems.Sort(_context, sortOrder);
         return View(dwarves);
     }
 
