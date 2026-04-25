@@ -13,7 +13,9 @@ public enum AreaResourcesType
 public class AreaResource
 {
     public int Id { get; set; }
+    
     public int AreaId { get; set; }
+    public Area Area { get; set; }
     
     public AreaResourcesType Type { get; set; }
     
