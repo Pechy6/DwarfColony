@@ -22,7 +22,6 @@ public enum DwarfState
     Idle,
     Working,
     Sleeping,
-    Eating,
     Dead
 }
 

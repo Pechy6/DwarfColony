@@ -11,27 +11,27 @@ public class SeedData
             context.Dwarves.Add(new Dwarf
             { Name = "Thorin",
                 Age = 195,
-                Energy = 80,
-                Hunger = 20,
-                Thirst = 10,
+                Energy = 100,
+                Hunger = 100,
+                Thirst = 100,
                 IsAlive = true
             });
             context.Dwarves.Add(new Dwarf()
             {
                 Name = "Balin",
                 Age = 178,
-                Energy = 56,
-                Hunger = 80,
-                Thirst = 90,
+                Energy = 100,
+                Hunger = 100,
+                Thirst = 100,
                 IsAlive = true
             });
             context.Dwarves.Add(new Dwarf()
             {
                 Name = "Dwalin",
                 Age = 340,
-                Energy = 97,
-                Hunger = 15,
-                Thirst = 35,
+                Energy = 100,
+                Hunger = 100,
+                Thirst = 100,
                 IsAlive = true
             });
             context.Dwarves.Add(new Dwarf()
@@ -39,38 +39,27 @@ public class SeedData
                 Name = "Oin",
                 Age = 250,
                 Energy = 100,
-                Hunger = 9,
-                Thirst = 86,
+                Hunger = 100,
+                Thirst = 100,
                 IsAlive = true
             });
         
             context.SaveChanges();   
         }
         
-        // if (!context.Storages.Any())
-        // {
-        //     context.Storages.Add(new Storage()
-        //     {
-        //         RawFood = 100,
-        //         Food = 50,
-        //         Water = 100,
-        //         Coal = 35,
-        //         Stone = 50,
-        //         IronCore = 20,
-        //         Wood = 100
-        //     });
-        //     context.SaveChanges();  
-        // }
-
-        // if (context.Storages.Any())
-        // {
-        //     var storage = context.Storages.Find(1);
-        //
-        //     if (storage != null)
-        //     {
-        //         storage.Water = 200;
-        //         context.SaveChanges(); 
-        //     }
-        // }
+        if (!context.Storages.Any())
+        {
+            context.Storages.Add(new Storage()
+            {
+                RawFood = 100,
+                Food = 50,
+                Water = 200,
+                Coal = 35,
+                Stone = 50,
+                IronCore = 20,
+                Wood = 100
+            });
+            context.SaveChanges();  
+        }
     }
 }
