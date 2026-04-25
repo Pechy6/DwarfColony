@@ -43,4 +43,7 @@ public class Dwarf
     
     // čas pro spánek
     public int ActionRemainingTime { get; set; }
+    
+    public int CurrentAreaId { get; set; }
+    public Area CurrentArea { get; set; } = null!;
 }
