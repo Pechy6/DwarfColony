@@ -1,6 +1,7 @@
+using DwarfColony.Models.Entities.World;
 using DwarfColony.Services;
 
-namespace DwarfColony.Models.Entities;
+namespace DwarfColony.Models.Entities.Dwarfs;
 
 public enum DwarfJob
 {

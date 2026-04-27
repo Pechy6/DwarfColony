@@ -1,4 +1,5 @@
 using DwarfColony.Models.Entities;
+using DwarfColony.Models.Entities.Dwarfs;
 
 namespace DwarfColony.Models.ViewModels;
 

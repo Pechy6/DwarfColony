@@ -1,5 +1,6 @@
 using DwarfColony.Data;
 using DwarfColony.Models.Entities;
+using DwarfColony.Models.Entities.Dwarfs;
 using Microsoft.EntityFrameworkCore;
 
 namespace DwarfColony.Services;

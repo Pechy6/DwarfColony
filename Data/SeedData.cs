@@ -1,4 +1,7 @@
 using DwarfColony.Models.Entities;
+using DwarfColony.Models.Entities.Dwarfs;
+using DwarfColony.Models.Entities.World;
+using DwarfColony.Models.Entities.Resources;
 
 namespace DwarfColony.Data;
 

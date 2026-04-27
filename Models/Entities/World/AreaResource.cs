@@ -1,4 +1,4 @@
-namespace DwarfColony.Models.Entities;
+namespace DwarfColony.Models.Entities.World;
 
 public enum AreaResourcesType
 {
