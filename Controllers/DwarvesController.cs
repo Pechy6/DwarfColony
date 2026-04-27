@@ -24,12 +24,12 @@ public class DwarvesController(
     // GET
     public IActionResult Index(string? sortOrder)
     {
-        var dwarves = new IndexViewModel
+        var indexViewModel = new IndexViewModel
         {
             Dwarves = _sortItems.Sort(_context, sortOrder).ToList(),
             SortOrder = sortOrder
         };
-        return View(dwarves);
+        return View(indexViewModel);
     }
 
     public IActionResult Create()
