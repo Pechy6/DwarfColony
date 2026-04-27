@@ -1,5 +1,6 @@
 using DwarfColony.Data;
 using DwarfColony.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using DwarfColony.Models.ViewModels;
 using DwarfColony.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,31 +27,7 @@ public class DwarvesController(
         var dwarves = new IndexViewModel
         {
             Dwarves = _sortItems.Sort(_context, sortOrder).ToList(),
-            SortOrder = sortOrder,
-            NameSort = sortOrder == "name_desc"
-                ? "name"
-                : "name_desc",
-            AgeSort = sortOrder == "age_desc"
-                ? "age"
-                : "age_desc",
-            EnergySort = sortOrder == "energy_desc"
-                ? "energy"
-                : "energy_desc",
-            HungerSort = sortOrder == "hunger_desc"
-                ? "hunger"
-                : "hunger_desc",
-            ThirstSort = sortOrder == "thirst_desc"
-                ? "thirst"
-                : "thirst_desc",
-            JobSort = sortOrder == "job_desc"
-                ? "job"
-                : "job_desc",
-            StatusSort = sortOrder == "status_desc"
-                ? "status"
-                : "status_desc",
-            StateSort = sortOrder == "state_desc"
-                ? "state"
-                : "state_desc"
+            SortOrder = sortOrder
         };
         return View(dwarves);
     }
