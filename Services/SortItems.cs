@@ -31,6 +31,8 @@ public class SortItems
             "job_desc" => dwarves.OrderByDescending(d => d.Job),
             "status" => dwarves.OrderBy(d => d.Status),
             "status_desc" => dwarves.OrderByDescending(d => d.Status),
+            "area" => dwarves.OrderBy(d => d.CurrentArea.Name),
+            "area_desc" => dwarves.OrderByDescending(d => d.CurrentArea.Name),
             _ => dwarves.OrderBy(d => d.Name)
         };
     }
