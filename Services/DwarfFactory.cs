@@ -24,7 +24,7 @@ public class DwarfFactory
     /// <returns>
     /// A newly created Dwarf entity.
     /// </returns>
-    public Dwarf Create(CreateDwarfModel createDwarfModel)
+    public Dwarf Create(CreateDwarfModel createDwarfModel, int currentAreaId)
     {
         Dwarf newDwarf = new Dwarf();
         newDwarf.Name = createDwarfModel.Name;
@@ -32,6 +32,7 @@ public class DwarfFactory
         newDwarf.Energy = _startValue;
         newDwarf.Hunger = _startValue;
         newDwarf.Thirst = _startValue;
+        newDwarf.CurrentAreaId = currentAreaId;
         newDwarf.IsAlive = true;
         return newDwarf;
     }

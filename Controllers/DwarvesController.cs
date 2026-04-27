@@ -42,9 +42,10 @@ public class DwarvesController(
     [ValidateAntiForgeryToken]
     public IActionResult Create(CreateDwarfModel createDwarfModel)
     {
+        var startingAreaId = _context.Areas.First();
         if (ModelState.IsValid)
         {
-            var dwarf = _dwarfFactory.Create(createDwarfModel);
+            var dwarf = _dwarfFactory.Create(createDwarfModel, startingAreaId.Id);
             _context.Dwarves.Add(dwarf);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
