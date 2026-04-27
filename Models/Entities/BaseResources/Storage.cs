@@ -1,4 +1,4 @@
-namespace DwarfColony.Models.Entities.Resources;
+namespace DwarfColony.Models.Entities.BaseResources;
 
 public class Storage
 {

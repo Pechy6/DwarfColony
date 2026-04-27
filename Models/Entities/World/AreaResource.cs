@@ -1,14 +1,6 @@
-namespace DwarfColony.Models.Entities.World;
+using DwarfColony.Models.Entities.WorldResources;
 
-public enum AreaResourcesType
-{
-    Water,
-    Wood,
-    Stone,
-    IronOre,
-    Coal,
-    Food
-}
+namespace DwarfColony.Models.Entities.World;
 
 public class AreaResource
 {
@@ -17,7 +9,8 @@ public class AreaResource
     public int AreaId { get; set; }
     public Area Area { get; set; }
     
-    public AreaResourcesType Type { get; set; }
+    public int ResourceTypeId { get; set; }
+    public ResourceType ResourceType { get; set; }
     
     public int Amount { get; set; }
 }

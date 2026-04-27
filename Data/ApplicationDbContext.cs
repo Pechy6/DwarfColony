@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using DwarfColony.Models.Entities;
 using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.Entities.World;
-using DwarfColony.Models.Entities.Resources;
+using DwarfColony.Models.Entities.BaseResources;
 
 namespace DwarfColony.Data;
 
