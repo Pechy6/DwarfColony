@@ -2,6 +2,7 @@ using DwarfColony.Models.Entities;
 using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.Entities.World;
 using DwarfColony.Models.Entities.BaseResources;
+using DwarfColony.Models.Entities.WorldResources;
 
 namespace DwarfColony.Data;
 
@@ -37,6 +38,19 @@ public class SeedData
                 CanRest = false
             });
             context.SaveChanges();
+        }
+
+        // Resources 
+        if (!context.ResourceTypes.Any())
+        {
+            context.ResourceTypes.AddRange(
+                new ResourceType {Name = "RawFood"},
+                new ResourceType { Name = "Food" },
+                new ResourceType { Name = "Water" },
+                new ResourceType { Name = "Stone" },
+                new ResourceType { Name = "IronCore" },
+                new ResourceType { Name = "Coal" },
+            new ResourceType { Name = "Wood" });
         }
 
         // Storage

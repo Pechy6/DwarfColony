@@ -32,7 +32,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             WithMany(a => a.Resources).
             HasForeignKey(ar => ar.AreaId);
 
-        // modelBuilder.
-        //     Entity<AreaResource>().HasOne(ar => ar.ResourceType).WithMany(rt => rt.AreaResources)
+        // AreaResource ma jeden typ zdroje, jeden ResourceType muze byt pouzit ve vice AreaResource
+        modelBuilder.
+            Entity<AreaResource>().
+            HasOne(ar => ar.ResourceType).
+            WithMany(rt => rt.AreaResources).
+            HasForeignKey(ar => ar.ResourceTypeId);
     }
 }
