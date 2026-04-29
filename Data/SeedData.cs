@@ -10,12 +10,27 @@ public class SeedData
 {
     public static void Initialize(ApplicationDbContext context)
     {
+        // Resources 
+        if (!context.ResourceTypes.Any())
+        {
+            context.ResourceTypes.AddRange(
+                new ResourceType { Name = "RawFood" },
+                new ResourceType { Name = "Food" },
+                new ResourceType { Name = "Water" },
+                new ResourceType { Name = "Stone" },
+                new ResourceType { Name = "IronCore" },
+                new ResourceType { Name = "Coal" },
+                new ResourceType { Name = "Wood" });
+
+            context.SaveChanges();
+        }
+
         // Areas
         if (!context.Areas.Any())
         {
             context.Areas.Add(new Area
             {
-                Name = "Dwarf basement",
+                Name = "Stone heart base",
                 Description = "The basement of the dwarves",
                 Type = AreaType.Base,
                 DistanceFromBase = 0,
@@ -37,20 +52,63 @@ public class SeedData
                 IsUnlocked = true,
                 CanRest = false
             });
+
+            context.Areas.Add(new Area
+            {
+                Name = "East desert",
+                Description =
+                    "The East desert is a vast, arid region with sand dunes, sparse vegetation, and occasional oasis. It is a challenging environment for exploration and resource gathering.",
+                Type = AreaType.Desert,
+                DistanceFromBase = 6,
+                MaxWorkers = 35,
+                IsUnlocked = false,
+                CanRest = false
+            });
             context.SaveChanges();
         }
 
-        // Resources 
-        if (!context.ResourceTypes.Any())
+        //Area resources 
+        if (!context.AreaResources.Any())
         {
-            context.ResourceTypes.AddRange(
-                new ResourceType {Name = "RawFood"},
-                new ResourceType { Name = "Food" },
-                new ResourceType { Name = "Water" },
-                new ResourceType { Name = "Stone" },
-                new ResourceType { Name = "IronCore" },
-                new ResourceType { Name = "Coal" },
-            new ResourceType { Name = "Wood" });
+            // Areas
+            var dwarfBase = context.Areas.First(a => a.Name == "Stone heart base");
+            var northForrest = context.Areas.First(a => a.Name == "North forest");
+            var eastDesert = context.Areas.First(a => a.Name == "East desert");
+
+            // Resources
+            var water = context.ResourceTypes.First(r => r.Name == "Water");
+            var wood = context.ResourceTypes.First(r => r.Name == "Wood");
+            var stone = context.ResourceTypes.First(r => r.Name == "Stone");
+            var food = context.ResourceTypes.First(r => r.Name == "Food");
+            var rawFood = context.ResourceTypes.First(r => r.Name == "RawFood");
+            var ironCore = context.ResourceTypes.First(r => r.Name == "IronCore");
+            var coal = context.ResourceTypes.First(r => r.Name == "Coal");
+
+            context.AreaResources.AddRange(
+                // Stone heart base
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = wood.Id, Amount = 50 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = water.Id, Amount = 100 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = stone.Id, Amount = 400 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = ironCore.Id, Amount = 150 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = coal.Id, Amount = 200 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = food.Id, Amount = 100 },
+                new AreaResource { AreaId = dwarfBase.Id, ResourceTypeId = rawFood.Id, Amount = 180 },
+                
+                // North forrest
+                new AreaResource { AreaId = northForrest.Id, ResourceTypeId = wood.Id, Amount = 600 },
+                new AreaResource { AreaId = northForrest.Id, ResourceTypeId = water.Id, Amount = 999 },
+                new AreaResource { AreaId = northForrest.Id, ResourceTypeId = stone.Id, Amount = 30 },
+                new AreaResource { AreaId = northForrest.Id, ResourceTypeId = food.Id, Amount = 180 },
+                new AreaResource { AreaId = northForrest.Id, ResourceTypeId = rawFood.Id, Amount = 300 },
+                
+                //East desert
+                new AreaResource { AreaId = eastDesert.Id, ResourceTypeId = wood.Id, Amount = 5 },
+                new AreaResource { AreaId = eastDesert.Id, ResourceTypeId = water.Id, Amount = 15 },
+                new AreaResource { AreaId = eastDesert.Id, ResourceTypeId = stone.Id, Amount = 10 },
+                new AreaResource { AreaId = eastDesert.Id, ResourceTypeId = food.Id, Amount = 10 },
+                new AreaResource { AreaId = eastDesert.Id, ResourceTypeId = rawFood.Id, Amount = 25 }
+            );
+            context.SaveChanges();
         }
 
         // Storage
