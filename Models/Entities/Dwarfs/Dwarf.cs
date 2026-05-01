@@ -23,6 +23,7 @@ public enum DwarfState
     Idle,
     Working,
     Sleeping,
+    Traveling,
     Dead
 }
 
@@ -45,6 +46,12 @@ public class Dwarf
     // čas pro spánek
     public int ActionRemainingTime { get; set; }
     
+    // Area kde se nachazi
     public int CurrentAreaId { get; set; }
     public Area CurrentArea { get; set; } = null!;
+    
+    // Area kam se chce posunout
+    public int? TargetAreaId { get; set; }
+    // Cas za jak dlouho dojde do te target area 
+    public int TravelRemainingTicks { get; set; }
 }
