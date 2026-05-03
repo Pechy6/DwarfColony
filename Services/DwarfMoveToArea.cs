@@ -1,6 +1,7 @@
 using DwarfColony.Data;
 using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.Entities.World;
+using Microsoft.EntityFrameworkCore;
 
 namespace DwarfColony.Services;
 
@@ -23,12 +24,26 @@ public class DwarfMoveToArea(ApplicationDbContext context)
 
     public void HandleTravelTick()
     {
-        // Pridej podminku pokud spi atd.. 
-        var dwarf = _context.
+        var dwarves = _context.
             Dwarves.
+            Include(d => d.TargetArea).
             Where(d => d.State == DwarfState.Traveling && d.TargetAreaId != null && d.TravelRemainingTicks > 0).
             ToList();
-        
-        
+
+        foreach (var dwarf in dwarves)
+        {
+            MoveToArea(dwarf, dwarf.TargetArea);
+            if (dwarf.TravelRemainingTicks > 0)
+            {
+                dwarf.TravelRemainingTicks--;
+            }
+            else
+            {
+                dwarf.CurrentArea = dwarf.TargetArea;
+                dwarf.State = DwarfState.Idle;
+                dwarf.TargetAreaId = null;
+            }
+            
+        }
     }
 }
