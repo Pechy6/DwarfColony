@@ -1,0 +1,39 @@
+@model DwarfTableViewModel;
+
+<div class="table-responsive-md">
+    <table class="table table-dark table-hover">
+        <thead class="table-danger">
+        <tr>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="@Model.NameSort">Name</a></th>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="@Model.JobSort">Job</a></th>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="@Model.StateSort">State</a></th>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Current Area</a></th>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Destination</a></th>
+            <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Distance to destination</a></th>
+            <td>Current area</td>
+            <th>Change job</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var dwarf in Model.Dwarves)
+        {
+            <tr>
+                <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id"
+                       class="table-text">@dwarf.Name</a></td>
+                <td>@dwarf.Age</td>
+                <td>@dwarf.Job</td>
+                <td>@dwarf.State</td>
+                <td>@(dwarf.CurrentArea?.Name ?? "Unknown")</td>
+                <td>@dwarf.TargetArea</td>
+                <td>@dwarf.TravelRemainingTicks</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<form asp-controller="Dwarves" asp-action="Tick" method="post">
+    <div class="text-start">
+        <button type="submit" class="btn btn-outline-light btn-lg">Tick</button>
+    </div>
+</form>

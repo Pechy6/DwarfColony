@@ -21,6 +21,7 @@ builder.Services.AddScoped<ResourceProductionService>();
 builder.Services.AddScoped<DwarfRecoveryService>();
 builder.Services.AddScoped<DwarfStateService>();
 builder.Services.AddScoped<SortItems>();
+builder.Services.AddScoped<DwarfMoveToArea>();
 
 var app = builder.Build();
 
