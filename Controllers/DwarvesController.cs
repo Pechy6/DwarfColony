@@ -24,7 +24,7 @@ public class DwarvesController(
     // GET
     public IActionResult Index(string? sortOrder)
     {
-        var indexViewModel = new IndexViewModel
+        var indexViewModel = new DwarfTableViewModel
         {
             Dwarves = _sortItems.Sort(_context, sortOrder).ToList(),
             SortOrder = sortOrder

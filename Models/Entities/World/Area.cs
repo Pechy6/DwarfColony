@@ -28,5 +28,8 @@ public class Area
     public bool CanRest { get; set; } = false;
 
     public ICollection<AreaResource> Resources { get; set; } = new List<AreaResource>();
-    public ICollection<Dwarf> Dwarves { get; set; } = new List<Dwarf>();
+    // Dwarves in current area
+    public ICollection<Dwarf> CurrentDwarves { get; set; } = new List<Dwarf>();
+    // Dwarves coming to this area
+    public ICollection<Dwarf> IncomingDwarves { get; set; } = new List<Dwarf>();
 }

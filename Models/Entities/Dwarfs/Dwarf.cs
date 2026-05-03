@@ -46,12 +46,16 @@ public class Dwarf
     // čas pro spánek
     public int ActionRemainingTime { get; set; }
     
+    
     // Area kde se nachazi
     public int CurrentAreaId { get; set; }
     public Area CurrentArea { get; set; } = null!;
     
-    // Area kam se chce posunout
+    
+    // Area kam se chce  presunout
     public int? TargetAreaId { get; set; }
+    public Area? TargetArea { get; set; }
+    
     // Cas za jak dlouho dojde do te target area 
-    public int TravelRemainingTicks { get; set; }
+    public int TravelRemainingTicks { get; set; } = 0;
 }
