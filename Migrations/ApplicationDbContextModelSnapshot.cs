@@ -52,7 +52,7 @@ namespace DwarfColony.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Storages");
+                    b.ToTable("Storages", (string)null);
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.Dwarfs.Dwarf", b =>
@@ -107,7 +107,7 @@ namespace DwarfColony.Migrations
 
                     b.HasIndex("CurrentAreaId");
 
-                    b.ToTable("Dwarves");
+                    b.ToTable("Dwarves", (string)null);
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.World.Area", b =>
@@ -143,7 +143,7 @@ namespace DwarfColony.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", (string)null);
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.World.AreaResource", b =>
@@ -169,7 +169,7 @@ namespace DwarfColony.Migrations
 
                     b.HasIndex("ResourceTypeId");
 
-                    b.ToTable("AreaResources");
+                    b.ToTable("AreaResources", (string)null);
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.ResourceType", b =>
@@ -186,7 +186,7 @@ namespace DwarfColony.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ResourceTypes");
+                    b.ToTable("ResourceTypes", (string)null);
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.Dwarfs.Dwarf", b =>

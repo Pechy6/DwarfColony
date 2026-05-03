@@ -23,8 +23,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.
             Entity<Dwarf>().
             HasOne(d => d.CurrentArea).
-            WithMany(a => a.Dwarves).
-            HasForeignKey(d => d.CurrentAreaId);
+            WithMany(a => a.CurrentDwarves).
+            HasForeignKey(d => d.CurrentAreaId).
+            OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.
+            Entity<Dwarf>().
+            HasOne(d => d.TargetArea).
+            WithMany(a => a.IncomingDwarves).
+            HasForeignKey(d => d.TargetAreaId).
+            OnDelete(DeleteBehavior.Restrict);
+        
         // Oblast muze mit vice zdroju
         modelBuilder.
             Entity<AreaResource>().

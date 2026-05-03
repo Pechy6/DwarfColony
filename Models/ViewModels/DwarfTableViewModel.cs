@@ -3,7 +3,7 @@ using DwarfColony.Models.Entities.Dwarfs;
 
 namespace DwarfColony.Models.ViewModels;
 
-public class IndexViewModel
+public class DwarfTableViewModel
 {
     public List<Dwarf> Dwarves { get; set; } = new();
 
