@@ -10,9 +10,7 @@
             <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Current Area</a></th>
             <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Destination</a></th>
             <th><a asp-controller="DwarfOrders" asp-action="Index" asp-route-sortOrder="">Distance to destination</a></th>
-            <td>Current area</td>
-            <th>Change job</th>
-            <th>Delete</th>
+            <th>Set destination</th>
         </tr>
         </thead>
         <tbody>
@@ -21,12 +19,12 @@
             <tr>
                 <td><a asp-controller="Dwarves" asp-action="Details" asp-route-id="@dwarf.Id"
                        class="table-text">@dwarf.Name</a></td>
-                <td>@dwarf.Age</td>
                 <td>@dwarf.Job</td>
                 <td>@dwarf.State</td>
                 <td>@(dwarf.CurrentArea?.Name ?? "Unknown")</td>
-                <td>@dwarf.TargetArea</td>
+                <td>@(dwarf.TargetArea?.Name ?? "Not")</td>
                 <td>@dwarf.TravelRemainingTicks</td>
+                <td></td>
             </tr>
         }
         </tbody>
