@@ -1,7 +1,9 @@
 using DwarfColony.Data;
+using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.ViewModels;
 using DwarfColony.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DwarfColony.Controllers;
 
@@ -25,6 +27,33 @@ public class DwarfOrdersController(
                 Sort(_context, sortOrder).
                 ToList(),
             SortOrder = sortOrder
+        };
+        return View(viewModel);
+    }
+
+    public IActionResult SetArea(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var dwarf = _context.
+            Dwarves.
+            Include(d => d.CurrentArea).
+            FirstOrDefault(d => d.Id == id);
+        
+        if (dwarf == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new SetAreaViewModel
+        {
+            DwarfName = dwarf.Name,
+            CurrentArea = dwarf.CurrentArea?.Name ?? "Unknow",
+            TargetAreas = _context.Areas.ToList(),
+            Distance = dwarf.TravelRemainingTicks
         };
         return View(viewModel);
     }
