@@ -3,6 +3,7 @@ using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.ViewModels;
 using DwarfColony.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DwarfColony.Controllers;
@@ -42,7 +43,9 @@ public class DwarfOrdersController(
             Dwarves.
             Include(d => d.CurrentArea).
             FirstOrDefault(d => d.Id == id);
-        
+
+        var area = _context.Areas.ToList();
+
         if (dwarf == null)
         {
             return NotFound();
@@ -50,10 +53,18 @@ public class DwarfOrdersController(
 
         var viewModel = new SetAreaViewModel
         {
+            DwarfId = dwarf.Id,
             DwarfName = dwarf.Name,
             CurrentArea = dwarf.CurrentArea?.Name ?? "Unknow",
-            TargetAreas = _context.Areas.ToList(),
-            Distance = dwarf.TravelRemainingTicks
+            TargetAreas = area.
+                Select(a => new SelectListItem
+                {
+                    Value = a.Id.ToString(),
+                    Text = a.Name
+                }).
+                ToList(),
+            Distance = dwarf.TravelRemainingTicks,
+            Description = area.FirstOrDefault(a => a.Id == dwarf.TargetAreaId)?.Description ?? "No description available"
         };
         return View(viewModel);
     }

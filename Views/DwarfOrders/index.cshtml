@@ -24,7 +24,7 @@
                 <td>@(dwarf.CurrentArea?.Name ?? "Unknown")</td>
                 <td>@(dwarf.TargetArea?.Name ?? "Not")</td>
                 <td>@dwarf.TravelRemainingTicks</td>
-                <td></td>
+                <td><a asp-action="SetArea" asp-route-id="@dwarf.Id">Set area</a></td>
             </tr>
         }
         </tbody>

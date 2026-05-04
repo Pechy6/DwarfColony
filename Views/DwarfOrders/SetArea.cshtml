@@ -1,18 +1,20 @@
-@model TModel
+@model SetAreaViewModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "SetArea";
 }
 
-<!DOCTYPE html>
+<h3 class="text-start">@Model.DwarfName</h3>
+<h3 class="text-start">@Model.CurrentArea</h3>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<form asp-action="SetArea" method="post">
+    <input type="hidden" asp-for="DwarfId"/>
+    
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="TargetAreaId" class="form-label text-start d-block label-text"></label>
+        <select asp-for="TargetAreaId" asp-items="Model.TargetAreas" class="form-control mb-3"></select>
+    </div>
+</form>
+<p>@Model.Description</p>
+
