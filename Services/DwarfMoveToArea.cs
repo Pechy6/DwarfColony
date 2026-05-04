@@ -9,7 +9,7 @@ public class DwarfMoveToArea(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    private void MoveToArea(Dwarf dwarf, Area area)
+    public void StartTravel(Dwarf dwarf, Area area)
     {
         if (dwarf.CurrentAreaId == area.Id)
             return;
@@ -22,7 +22,7 @@ public class DwarfMoveToArea(ApplicationDbContext context)
         dwarf.TravelRemainingTicks = area.DistanceFromBase;
     }
 
-    public void HandleTravelTick()
+    private void TravelLogic()
     {
         var dwarves = _context.
             Dwarves.
@@ -32,18 +32,23 @@ public class DwarfMoveToArea(ApplicationDbContext context)
 
         foreach (var dwarf in dwarves)
         {
-            MoveToArea(dwarf, dwarf.TargetArea);
-            if (dwarf.TravelRemainingTicks > 0)
-            {
-                dwarf.TravelRemainingTicks--;
-            }
-            else
+            if (dwarf.TargetArea == null)
+                return;
+            
+            dwarf.TravelRemainingTicks--;
+
+            if (dwarf.TravelRemainingTicks <= 0)
             {
                 dwarf.CurrentArea = dwarf.TargetArea;
-                dwarf.State = DwarfState.Idle;
                 dwarf.TargetAreaId = null;
+                dwarf.State = DwarfState.Idle;
+                dwarf.TravelRemainingTicks = 0;
             }
-            
         }
+    }
+
+    public void HandleTravelTick()
+    {
+        TravelLogic();
     }
 }
