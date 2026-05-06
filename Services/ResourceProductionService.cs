@@ -39,9 +39,10 @@ public class ResourceProductionService(ApplicationDbContext context)
                 continue;
             var producedMaterial = ProductionResourceByStatus(dwarf);
 
-            if (dwarf.Job == DwarfJob.Cook)
+            if (dwarf.Job == DwarfJob.Cook || storage.RawFood > 0)
             {
                 storage.Food += producedMaterial;
+                storage.RawFood -= producedMaterial;
             }
 
             else if (dwarf.Job == DwarfJob.Miner)
