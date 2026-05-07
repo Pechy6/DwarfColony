@@ -1,13 +1,21 @@
 using DwarfColony.Data;
+using DwarfColony.Migrations;
 using DwarfColony.Models.Entities;
 using DwarfColony.Models.Entities.Dwarfs;
+using DwarfColony.Models.Entities.World;
+using DwarfStatus = DwarfColony.Models.Entities.Dwarfs.DwarfStatus;
 
 namespace DwarfColony.Services;
 
 public class ResourceProductionService(ApplicationDbContext context)
 {
+    private readonly ResourceAreaService _resourceAreaService = new ResourceAreaService(context);
+
     // Random number generator
     private readonly Random _random = new Random();
+    private readonly List<Area> areas = context.Areas.ToList();
+
+    private readonly string _wood = "Wood";
 
     public void ProduceManager()
     {
@@ -31,6 +39,7 @@ public class ResourceProductionService(ApplicationDbContext context)
     private void Produce()
     {
         var dwarves = context.Dwarves.ToList();
+        var areas = context.Areas.ToList();
         var storage = context.Storages.FirstOrDefault() ?? throw new Exception("No storage found");
 
         foreach (var dwarf in dwarves)
@@ -39,35 +48,23 @@ public class ResourceProductionService(ApplicationDbContext context)
                 continue;
             var producedMaterial = ProductionResourceByStatus(dwarf);
 
-            if (dwarf.Job == DwarfJob.Cook || storage.RawFood > 0)
+            if (dwarf.Job == DwarfJob.Cook && storage.RawFood > 0)
             {
                 storage.Food += producedMaterial;
                 storage.RawFood -= producedMaterial;
             }
 
-            else if (dwarf.Job == DwarfJob.Miner)
+            else if (dwarf.Job == DwarfJob.Woodcutter && IsDwarfInProduceLocation(dwarf))
             {
-                var resources = GetRandomResource();
-
-                if (resources == 0)
-                {
-                    storage.Stone += producedMaterial;
-                }
-                else if (resources == 1)
-                {
-                    storage.IronCore += producedMaterial;
-                }
-                else
-                {
-                    storage.Coal += producedMaterial;
-                }
+                storage.Wood += _resourceAreaService.ResourceTakenFromArea(dwarf, _wood, producedMaterial);
             }
 
-            else if (dwarf.Job == DwarfJob.Woodcutter)
+            else if (dwarf.Job == DwarfJob.Miner && IsDwarfInProduceLocation(dwarf))
             {
-                storage.Wood += producedMaterial;
+                storage.Stone += producedMaterial;
             }
         }
+        context.SaveChanges();
     }
 
     /// <summary>
@@ -92,6 +89,36 @@ public class ResourceProductionService(ApplicationDbContext context)
     private bool IsDwarfSleeping(Dwarf dwarf)
     {
         return dwarf.State == DwarfState.Sleeping;
+    }
+
+    private bool IsDwarfInProduceLocation(Dwarf dwarf)
+    {
+        var currentArea = dwarf.CurrentArea;
+        if (currentArea is null)
+        {
+            return false;
+        }
+
+        var currentJob = dwarf.Job;
+
+        if (currentJob == DwarfJob.Woodcutter)
+        {
+            var resourceType = currentArea.Resources.Any(r => r.ResourceType.Name == "Wood" && r.Amount > 0);
+            if (resourceType)
+                return true;
+        }
+
+        if (currentJob == DwarfJob.Miner)
+        {
+            var resourceType = currentArea.Resources.Any(r =>
+                (r.ResourceType.Name == "Stone" && r.Amount > 0) ||
+                (r.ResourceType.Name == "IronCore" && r.Amount > 0) ||
+                (r.ResourceType.Name == "Coal" && r.Amount > 0));
+            if (resourceType)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
