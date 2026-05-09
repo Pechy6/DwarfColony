@@ -1,9 +1,8 @@
 using DwarfColony.Data;
-using DwarfColony.Migrations;
-using DwarfColony.Models.Entities;
 using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.Entities.World;
 using DwarfStatus = DwarfColony.Models.Entities.Dwarfs.DwarfStatus;
+using Microsoft.EntityFrameworkCore;                   
 
 namespace DwarfColony.Services;
 
@@ -12,10 +11,12 @@ public class ResourceProductionService(ApplicationDbContext context)
     private readonly ResourceAreaService _resourceAreaService = new ResourceAreaService(context);
 
     // Random number generator
-    private readonly Random _random = new Random();
-    private readonly List<Area> areas = context.Areas.ToList();
+    private readonly Random _random = new Random(); 
 
-    private readonly string _wood = "Wood";
+    private const string _wood = "Wood";
+    private const string _stone = "Stone";
+    private const string _iron = "IronCore";
+    private const string _coal = "Coal";
 
     public void ProduceManager()
     {
@@ -23,22 +24,28 @@ public class ResourceProductionService(ApplicationDbContext context)
     }
 
     /// <summary>
-    /// Simulates resource production by all dwarves in the colony based on their assigned jobs.
-    /// Updates the storage with produced resources such as food, stone, iron, or wood.
-    /// - Cooks produce food.
-    /// - Miners produce either stone, coal or iron ore, determined randomly.
-    /// - Woodcutters produce wood.
-    /// The method retrieves dwarves and storage data from the database, calculates production
-    /// based on each dwarf's job, and updates the corresponding resource counts in the storage.
-    /// Changes are persisted to the database using SaveChanges().
-    /// Throws an exception if no storage is found.
+    /// Simuluje produkci zdrojů všemi trpaslíky v kolonii na základě jejich přidělené práce.
+    /// Aktualizuje storage o nově vyprodukované zdroje, jako je jídlo, kámen, železo nebo dřevo.
+    /// - Kuchaři produkují jídlo z neopracovaných surovin (raw food)
+    /// - Horníci produkují kámen, uhlí nebo železnou rudu, která je určena náhodně.
+    /// - Dřevorubci produkují dřevo.
+    /// Metoda načte trpaslíky a storage z databáze, vypočítá produkci
+    /// podle práce jednotlivých trpaslíků a aktualizuje odpovídající množství zdrojů ve storage.
+    /// Změny jsou následně uloženy do databáze pomocí SaveChanges().
+    /// Vyhodí výjimku, pokud v databázi neexistuje žádný storage.
     /// </summary>
     /// <exception cref="Exception">
-    /// Thrown when there is no storage entity available in the database.
+    /// Vyhozena v případě, že v databázi není dostupná žádná storage entita.
     /// </exception>
     private void Produce()
     {
-        var dwarves = context.Dwarves.ToList();
+        var dwarves = context.
+            Dwarves.
+            Include(d => d.CurrentArea).
+            ThenInclude(a => a.Resources).
+            ThenInclude(r => r.ResourceType).
+            ToList();
+        
         var areas = context.Areas.ToList();
         var storage = context.Storages.FirstOrDefault() ?? throw new Exception("No storage found");
 
@@ -61,7 +68,19 @@ public class ResourceProductionService(ApplicationDbContext context)
 
             else if (dwarf.Job == DwarfJob.Miner && IsDwarfInProduceLocation(dwarf))
             {
-                storage.Stone += producedMaterial;
+                switch (GetRandomResource())
+                {
+                    case 0:
+                        storage.Stone += _resourceAreaService.ResourceTakenFromArea(dwarf, _stone, producedMaterial);
+                        break;
+                    case 1:
+                        storage.Coal += _resourceAreaService.ResourceTakenFromArea(dwarf, _coal, producedMaterial);
+                        break;
+                    
+                    default:
+                        storage.IronCore += _resourceAreaService.ResourceTakenFromArea(dwarf, _iron, producedMaterial);
+                        break;
+                }
             }
         }
         context.SaveChanges();
@@ -74,6 +93,16 @@ public class ResourceProductionService(ApplicationDbContext context)
     private int GetRandomResource()
     {
         return _random.Next(0, 3);
+    }
+
+    private string GetRandomResourceString()
+    { 
+        return GetRandomResource() switch
+        {
+            0 => _stone,
+            1 => _coal,
+            _ => _iron
+        };
     }
 
     /// <summary>
@@ -103,7 +132,7 @@ public class ResourceProductionService(ApplicationDbContext context)
 
         if (currentJob == DwarfJob.Woodcutter)
         {
-            var resourceType = currentArea.Resources.Any(r => r.ResourceType.Name == "Wood" && r.Amount > 0);
+            var resourceType = currentArea.Resources.Any(r => r.ResourceType.Name == _wood && r.Amount > 0);
             if (resourceType)
                 return true;
         }
@@ -111,9 +140,9 @@ public class ResourceProductionService(ApplicationDbContext context)
         if (currentJob == DwarfJob.Miner)
         {
             var resourceType = currentArea.Resources.Any(r =>
-                (r.ResourceType.Name == "Stone" && r.Amount > 0) ||
-                (r.ResourceType.Name == "IronCore" && r.Amount > 0) ||
-                (r.ResourceType.Name == "Coal" && r.Amount > 0));
+                (r.ResourceType.Name == _stone && r.Amount > 0) ||
+                (r.ResourceType.Name == _iron && r.Amount > 0) ||
+                (r.ResourceType.Name == _coal && r.Amount > 0));
             if (resourceType)
                 return true;
         }
@@ -138,5 +167,30 @@ public class ResourceProductionService(ApplicationDbContext context)
         return GetRandomChance() == 0
             ? 1
             : 0;
+    }
+
+    private string SelectMiningResource(Dwarf dwarf, string resourceType, bool isRandom)
+    {
+        var currentJob = dwarf.Job;
+        if (currentJob != DwarfJob.Miner)
+        {
+            return "none";
+        }
+
+        if (isRandom)
+        {
+            return GetRandomResourceString();
+        }
+
+        if (resourceType == _stone)
+        {
+            return _stone;
+        }
+        else if (resourceType == _coal)
+        {
+            return _coal;
+        }
+
+        return _iron;
     }
 }
