@@ -1,4 +1,5 @@
 using DwarfColony.Models.Entities.Dwarfs;
+using DwarfColony.Models.Entities.WorldResources;
 
 namespace DwarfColony.Models.Entities.World;
 
@@ -27,7 +28,10 @@ public class Area
     public bool IsUnlocked { get; set; } = false;
     public bool CanRest { get; set; } = false;
 
+    // Resources in this area
     public ICollection<AreaResource> Resources { get; set; } = new List<AreaResource>();
+    // Rare resources in this area
+    public ICollection<RareResources> RareResources { get; set; } = new List<RareResources>();
     // Dwarves in current area
     public ICollection<Dwarf> CurrentDwarves { get; set; } = new List<Dwarf>();
     // Dwarves coming to this area

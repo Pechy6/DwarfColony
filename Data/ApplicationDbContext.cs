@@ -47,5 +47,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             HasOne(ar => ar.ResourceType).
             WithMany(rt => rt.AreaResources).
             HasForeignKey(ar => ar.ResourceTypeId);
+
+        modelBuilder.
+            Entity<RareResources>().
+            HasOne(r => r.Area).
+            WithMany(a => a.RareResources).
+            HasForeignKey(r => r.AreaId);
+
+        modelBuilder.
+            Entity<RareResources>().
+            HasOne(r => r.ResourceType).
+            WithMany(rt => rt.RareResources).
+            HasForeignKey(r => r.ResourceTypeId);
     }
 }

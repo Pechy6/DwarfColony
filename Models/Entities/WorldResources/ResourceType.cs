@@ -7,4 +7,5 @@ public class ResourceType
     public int Id { get; set; }
     public string Name { get; set; } = "";
     public ICollection<AreaResource> AreaResources { get; set; } = new List<AreaResource>();
+    public ICollection<RareResources> RareResources { get; set; } = new List<RareResources>();
 }
