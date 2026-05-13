@@ -29,13 +29,19 @@ namespace DwarfColony.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Charcoal")
+                        .HasColumnType("int");
+
                     b.Property<int>("Coal")
                         .HasColumnType("int");
 
                     b.Property<int>("Food")
                         .HasColumnType("int");
 
-                    b.Property<int>("IronCore")
+                    b.Property<int>("GoldOre")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IronOre")
                         .HasColumnType("int");
 
                     b.Property<int>("RawFood")
@@ -174,6 +180,35 @@ namespace DwarfColony.Migrations
                     b.ToTable("AreaResources");
                 });
 
+            modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.RareResources", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ChanceToMine")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ResourceTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("ResourceTypeId");
+
+                    b.ToTable("RareResources");
+                });
+
             modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.ResourceType", b =>
                 {
                     b.Property<int>("Id")
@@ -228,11 +263,32 @@ namespace DwarfColony.Migrations
                     b.Navigation("ResourceType");
                 });
 
+            modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.RareResources", b =>
+                {
+                    b.HasOne("DwarfColony.Models.Entities.World.Area", "Area")
+                        .WithMany("RareResources")
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DwarfColony.Models.Entities.WorldResources.ResourceType", "ResourceType")
+                        .WithMany("RareResources")
+                        .HasForeignKey("ResourceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+
+                    b.Navigation("ResourceType");
+                });
+
             modelBuilder.Entity("DwarfColony.Models.Entities.World.Area", b =>
                 {
                     b.Navigation("CurrentDwarves");
 
                     b.Navigation("IncomingDwarves");
+
+                    b.Navigation("RareResources");
 
                     b.Navigation("Resources");
                 });
@@ -240,6 +296,8 @@ namespace DwarfColony.Migrations
             modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.ResourceType", b =>
                 {
                     b.Navigation("AreaResources");
+
+                    b.Navigation("RareResources");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,6 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Area> Areas { get; set; }
     public DbSet<AreaResource> AreaResources { get; set; }
     public DbSet<ResourceType> ResourceTypes { get; set; }
+    public DbSet<RareResources> RareResources { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

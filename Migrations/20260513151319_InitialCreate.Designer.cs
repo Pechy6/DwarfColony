@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DwarfColony.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260427193506_ResourceType")]
-    partial class ResourceType
+    [Migration("20260513151319_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,46 @@ namespace DwarfColony.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DwarfColony.Models.Entities.BaseResources.Storage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Charcoal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Coal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Food")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoldOre")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IronOre")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RawFood")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Stone")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Water")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wood")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Storages");
+                });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.Dwarfs.Dwarf", b =>
                 {
@@ -63,48 +103,22 @@ namespace DwarfColony.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TargetAreaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Thirst")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TravelRemainingTicks")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CurrentAreaId");
 
+                    b.HasIndex("TargetAreaId");
+
                     b.ToTable("Dwarves");
-                });
-
-            modelBuilder.Entity("DwarfColony.Models.Entities.Resources.Storage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Coal")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Food")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IronCore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RawFood")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Stone")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Water")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Wood")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Storages");
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.World.Area", b =>
@@ -169,6 +183,35 @@ namespace DwarfColony.Migrations
                     b.ToTable("AreaResources");
                 });
 
+            modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.RareResources", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ChanceToMine")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ResourceTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("ResourceTypeId");
+
+                    b.ToTable("RareResources");
+                });
+
             modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.ResourceType", b =>
                 {
                     b.Property<int>("Id")
@@ -183,18 +226,25 @@ namespace DwarfColony.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ResourceType");
+                    b.ToTable("ResourceTypes");
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.Dwarfs.Dwarf", b =>
                 {
                     b.HasOne("DwarfColony.Models.Entities.World.Area", "CurrentArea")
-                        .WithMany("Dwarves")
+                        .WithMany("CurrentDwarves")
                         .HasForeignKey("CurrentAreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DwarfColony.Models.Entities.World.Area", "TargetArea")
+                        .WithMany("IncomingDwarves")
+                        .HasForeignKey("TargetAreaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("CurrentArea");
+
+                    b.Navigation("TargetArea");
                 });
 
             modelBuilder.Entity("DwarfColony.Models.Entities.World.AreaResource", b =>
@@ -206,7 +256,26 @@ namespace DwarfColony.Migrations
                         .IsRequired();
 
                     b.HasOne("DwarfColony.Models.Entities.WorldResources.ResourceType", "ResourceType")
-                        .WithMany()
+                        .WithMany("AreaResources")
+                        .HasForeignKey("ResourceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+
+                    b.Navigation("ResourceType");
+                });
+
+            modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.RareResources", b =>
+                {
+                    b.HasOne("DwarfColony.Models.Entities.World.Area", "Area")
+                        .WithMany("RareResources")
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DwarfColony.Models.Entities.WorldResources.ResourceType", "ResourceType")
+                        .WithMany("RareResources")
                         .HasForeignKey("ResourceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -218,9 +287,20 @@ namespace DwarfColony.Migrations
 
             modelBuilder.Entity("DwarfColony.Models.Entities.World.Area", b =>
                 {
-                    b.Navigation("Dwarves");
+                    b.Navigation("CurrentDwarves");
+
+                    b.Navigation("IncomingDwarves");
+
+                    b.Navigation("RareResources");
 
                     b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("DwarfColony.Models.Entities.WorldResources.ResourceType", b =>
+                {
+                    b.Navigation("AreaResources");
+
+                    b.Navigation("RareResources");
                 });
 #pragma warning restore 612, 618
         }

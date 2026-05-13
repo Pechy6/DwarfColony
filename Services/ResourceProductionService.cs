@@ -15,7 +15,7 @@ public class ResourceProductionService(ApplicationDbContext context)
 
     private const string _wood = "Wood";
     private const string _stone = "Stone";
-    private const string _iron = "IronCore";
+    private const string _iron = "Iron ore";
     private const string _coal = "Coal";
 
     public void ProduceManager()
@@ -68,43 +68,13 @@ public class ResourceProductionService(ApplicationDbContext context)
 
             else if (dwarf.Job == DwarfJob.Miner && IsDwarfInProduceLocation(dwarf))
             {
-                switch (GetRandomResource())
-                {
-                    case 0:
-                        storage.Stone += _resourceAreaService.ResourceTakenFromArea(dwarf, _stone, producedMaterial);
-                        break;
-                    case 1:
-                        storage.Coal += _resourceAreaService.ResourceTakenFromArea(dwarf, _coal, producedMaterial);
-                        break;
-                    
-                    default:
-                        storage.IronCore += _resourceAreaService.ResourceTakenFromArea(dwarf, _iron, producedMaterial);
-                        break;
-                }
+                storage.Stone += _resourceAreaService.ResourceTakenFromArea(dwarf, _stone, producedMaterial);
             }
         }
         context.SaveChanges();
     }
-
-    /// <summary>
-    /// Returns a random integer between 0 and 2, representing a resource type.
-    /// </summary>
-    /// <returns></returns>
-    private int GetRandomResource()
-    {
-        return _random.Next(0, 3);
-    }
-
-    private string GetRandomResourceString()
-    { 
-        return GetRandomResource() switch
-        {
-            0 => _stone,
-            1 => _coal,
-            _ => _iron
-        };
-    }
-
+    
+    
     /// <summary>
     /// Vrací náhodnou hodnotu 0 nebo 1.
     /// Používá se pro určení, zda trpaslík ve špatném stavu vyprodukuje alespoň 1 jednotku surovin, nebo nic.
@@ -167,30 +137,5 @@ public class ResourceProductionService(ApplicationDbContext context)
         return GetRandomChance() == 0
             ? 1
             : 0;
-    }
-
-    private string SelectMiningResource(Dwarf dwarf, string resourceType, bool isRandom)
-    {
-        var currentJob = dwarf.Job;
-        if (currentJob != DwarfJob.Miner)
-        {
-            return "none";
-        }
-
-        if (isRandom)
-        {
-            return GetRandomResourceString();
-        }
-
-        if (resourceType == _stone)
-        {
-            return _stone;
-        }
-        else if (resourceType == _coal)
-        {
-            return _coal;
-        }
-
-        return _iron;
     }
 }

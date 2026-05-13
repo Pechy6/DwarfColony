@@ -26,7 +26,7 @@ public class NavbarStatsViewComponent(ApplicationDbContext context) : ViewCompon
             Food = (storage?.Food ?? 0),
             RawFood = storage?.RawFood ?? 0,
             Wood = storage?.Wood ?? 0,
-            Materials = (storage?.Stone ?? 0) + (storage?.IronCore ?? 0) + (storage?.Coal ?? 0),
+            Materials = storage?.Stone ?? 0,
             Dwarves = dwarves
         };
         return View(model);

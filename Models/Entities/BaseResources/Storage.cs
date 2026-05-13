@@ -11,9 +11,11 @@ public class Storage
     
     // Resources from mining
     public int Stone { get; set; }
-    public int IronCore { get; set; }
+    public int IronOre { get; set; }
     public int Coal { get; set; }
+    public int GoldOre { get; set; }
     
     // Resources from woodcutting
     public int Wood { get; set; }
+    public int Charcoal { get; set; }
 }
