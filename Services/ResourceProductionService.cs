@@ -2,7 +2,7 @@ using DwarfColony.Data;
 using DwarfColony.Models.Entities.Dwarfs;
 using DwarfColony.Models.Entities.World;
 using DwarfStatus = DwarfColony.Models.Entities.Dwarfs.DwarfStatus;
-using Microsoft.EntityFrameworkCore;                   
+using Microsoft.EntityFrameworkCore;
 
 namespace DwarfColony.Services;
 
@@ -11,12 +11,13 @@ public class ResourceProductionService(ApplicationDbContext context)
     private readonly ResourceAreaService _resourceAreaService = new ResourceAreaService(context);
 
     // Random number generator
-    private readonly Random _random = new Random(); 
+    private readonly Random _random = new Random();
 
     private const string _wood = "Wood";
     private const string _stone = "Stone";
     private const string _iron = "Iron ore";
     private const string _coal = "Coal";
+    private const string _gold = "Gold ore";
 
     public void ProduceManager()
     {
@@ -24,15 +25,17 @@ public class ResourceProductionService(ApplicationDbContext context)
     }
 
     /// <summary>
-    /// Simuluje produkci zdrojů všemi trpaslíky v kolonii na základě jejich přidělené práce.
-    /// Aktualizuje storage o nově vyprodukované zdroje, jako je jídlo, kámen, železo nebo dřevo.
-    /// - Kuchaři produkují jídlo z neopracovaných surovin (raw food)
-    /// - Horníci produkují kámen, uhlí nebo železnou rudu, která je určena náhodně.
-    /// - Dřevorubci produkují dřevo.
-    /// Metoda načte trpaslíky a storage z databáze, vypočítá produkci
-    /// podle práce jednotlivých trpaslíků a aktualizuje odpovídající množství zdrojů ve storage.
-    /// Změny jsou následně uloženy do databáze pomocí SaveChanges().
-    /// Vyhodí výjimku, pokud v databázi neexistuje žádný storage.
+    /// Simuluje produkci zdrojů všemi aktivními trpaslíky v kolonii na základě jejich přidělené práce.
+    /// Spící trpaslíci jsou při produkci přeskočeni.
+    /// - Kuchaři zpracovávají RawFood na Food podle dostupného množství surovin.
+    /// - Dřevorubci produkují Wood z aktuální lokace, pokud se nachází v produkční oblasti.
+    /// - Horníci vždy těží Stone z aktuální lokace a zároveň mají šanci vytěžit jeden vzácný zdroj.
+    /// Vzácné zdroje jsou načteny podle aktuální lokace trpaslíka.
+    /// Pokud má vzácný zdroj dostupné množství a náhodný hod projde přes jeho ChanceToMine,
+    /// je do storage přičten odpovídající zdroj a množství dostupného vzácného zdroje v lokaci se sníží.
+    /// V jednom produkčním cyklu může horník vytěžit maximálně jeden vzácný zdroj.
+    /// Metoda načte trpaslíky, jejich aktuální lokace, dostupné zdroje a storage z databáze.
+    /// Vypočítá produkci podle práce jednotlivých trpaslíků a změny následně uloží pomocí SaveChanges().
     /// </summary>
     /// <exception cref="Exception">
     /// Vyhozena v případě, že v databázi není dostupná žádná storage entita.
@@ -45,7 +48,7 @@ public class ResourceProductionService(ApplicationDbContext context)
             ThenInclude(a => a.Resources).
             ThenInclude(r => r.ResourceType).
             ToList();
-        
+
         var areas = context.Areas.ToList();
         var storage = context.Storages.FirstOrDefault() ?? throw new Exception("No storage found");
 
@@ -57,8 +60,9 @@ public class ResourceProductionService(ApplicationDbContext context)
 
             if (dwarf.Job == DwarfJob.Cook && storage.RawFood > 0)
             {
-                storage.Food += producedMaterial;
-                storage.RawFood -= producedMaterial;
+                var processedFood = Math.Min(storage.RawFood, producedMaterial);
+                storage.Food += processedFood;
+                storage.RawFood -= processedFood;
             }
 
             else if (dwarf.Job == DwarfJob.Woodcutter && IsDwarfInProduceLocation(dwarf))
@@ -69,12 +73,49 @@ public class ResourceProductionService(ApplicationDbContext context)
             else if (dwarf.Job == DwarfJob.Miner && IsDwarfInProduceLocation(dwarf))
             {
                 storage.Stone += _resourceAreaService.ResourceTakenFromArea(dwarf, _stone, producedMaterial);
+                var rareResources = context.
+                    RareResources.
+                    Where(r => r.AreaId == dwarf.CurrentAreaId).
+                    Include(r => r.ResourceType).
+                    ToList();
+
+                var availableRareResources = rareResources.
+                    Where(r => r.Amount > 0).
+                    OrderBy(_ => Guid.NewGuid()).
+                    ToList();
+
+                foreach (var resource in availableRareResources)
+                {
+                    double roll = Random.Shared.NextDouble();
+
+                    if (roll <= resource.ChanceToMine)
+                    {
+                        switch (resource.ResourceType.Name)
+                        {
+                            case _iron:
+                                storage.IronOre += 1;
+                                resource.Amount -= 1;
+                                break;
+                            case _coal:
+                                storage.Coal += 1;
+                                resource.Amount -= 1;
+                                break;
+                            case _gold:
+                                storage.GoldOre += 1;
+                                resource.Amount -= 1;
+                                break;
+                        }
+
+                        break;
+                    }
+                }
             }
         }
+
         context.SaveChanges();
     }
-    
-    
+
+
     /// <summary>
     /// Vrací náhodnou hodnotu 0 nebo 1.
     /// Používá se pro určení, zda trpaslík ve špatném stavu vyprodukuje alespoň 1 jednotku surovin, nebo nic.
@@ -110,9 +151,8 @@ public class ResourceProductionService(ApplicationDbContext context)
         if (currentJob == DwarfJob.Miner)
         {
             var resourceType = currentArea.Resources.Any(r =>
-                (r.ResourceType.Name == _stone && r.Amount > 0) ||
-                (r.ResourceType.Name == _iron && r.Amount > 0) ||
-                (r.ResourceType.Name == _coal && r.Amount > 0));
+                (r.ResourceType.Name == _stone && r.Amount > 0));
+
             if (resourceType)
                 return true;
         }

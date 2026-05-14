@@ -128,17 +128,24 @@ public class SeedData
 
             context.RareResources.AddRange(
                 // Stone heart base    
-                new RareResources { AreaId = dwarfBase.Id, ResourceTypeId = ironOre.Id, Amount = 100, ChanceToMine = 0.01},
-                new RareResources { AreaId = dwarfBase.Id, ResourceTypeId = goldOre.Id, Amount = 20, ChanceToMine = 0.005},
-                new RareResources { AreaId = dwarfBase.Id, ResourceTypeId = coal.Id, Amount = 120, ChanceToMine = 0.02},
+                new RareResources
+                    { AreaId = dwarfBase.Id, ResourceTypeId = ironOre.Id, Amount = 100, ChanceToMine = 0.01}, //0.01
+                new RareResources
+                    { AreaId = dwarfBase.Id, ResourceTypeId = goldOre.Id, Amount = 20, ChanceToMine = 0.005}, //0.005
+                new RareResources
+                    { AreaId = dwarfBase.Id, ResourceTypeId = coal.Id, Amount = 120, ChanceToMine = 0.02}, // 0.02
 
                 // North forest
-                new RareResources { AreaId = northForest.Id, ResourceTypeId = ironOre.Id, Amount = 20, ChanceToMine = 0.005},
-                
+                new RareResources
+                    { AreaId = northForest.Id, ResourceTypeId = ironOre.Id, Amount = 20, ChanceToMine = 0.005 },
+
                 // East desert
-                new RareResources { AreaId = eastDesert.Id, ResourceTypeId = ironOre.Id, Amount = 50, ChanceToMine = 0.01},
-                new RareResources { AreaId = eastDesert.Id, ResourceTypeId = goldOre.Id, Amount = 45, ChanceToMine = 0.005},
-                new RareResources { AreaId = eastDesert.Id, ResourceTypeId = coal.Id, Amount = 60, ChanceToMine = 0.015}
+                new RareResources
+                    { AreaId = eastDesert.Id, ResourceTypeId = ironOre.Id, Amount = 50, ChanceToMine = 0.01 },
+                new RareResources
+                    { AreaId = eastDesert.Id, ResourceTypeId = goldOre.Id, Amount = 45, ChanceToMine = 0.005 },
+                new RareResources
+                    { AreaId = eastDesert.Id, ResourceTypeId = coal.Id, Amount = 60, ChanceToMine = 0.015 }
             );
 
             context.SaveChanges();
